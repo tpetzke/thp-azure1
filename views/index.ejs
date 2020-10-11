@@ -7,5 +7,11 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    Database: <%= db %><br>
+    Collection: <%= collection %><br>
+    Number of Elements: <%= players.length %> <br>
+    <% for (i=0; i < players.length; i++) { %>
+    <p><%= players[i].firstname %> <%= players[i].lastname %></p>
+    <% } %>
   </body>
 </html>
