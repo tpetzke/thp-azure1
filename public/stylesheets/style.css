@@ -1,8 +1,585 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+* { margin:0; padding:0; }
+
+/* ibm-plex-sans-regular - latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/ibm-plex-sans-v5-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local('IBM Plex Sans'), local('IBMPlexSans'),
+       url('../fonts/ibm-plex-sans-v5-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/ibm-plex-sans-v5-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/ibm-plex-sans-v5-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/ibm-plex-sans-v5-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/ibm-plex-sans-v5-latin-regular.svg#IBMPlexSans') format('svg'); /* Legacy iOS */
 }
 
-a {
-  color: #00B7FF;
+label {
+  display:block;
+  margin-left: 18px;
+  margin-top: 4px;
+  font-size: 9px;
+  color: #0074E1;
+}
+
+/* Style the main menu */
+#main_mnu_bar
+{
+    float: left;
+    height:50px;
+    width:90%;
+    margin:0px auto 0  auto;
+    text-align:left;
+    background:#000000;
+}
+
+/* The menu is basically a list */
+#main_mnu_bar ul
+{
+    float:left;
+    list-style:none;
+    margin: 6px 0 0 8px;
+}
+
+#main_mnu_bar ul li
+{
+    float:left;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    padding:6px 8px;
+}
+
+#main_mnu_bar ul li a
+{
+     color: white;
+     text-decoration: none;
+}
+
+#main_mnu_bar ul li a:hover
+{
+    text-decoration: underline;
+}
+/* End of Menu Definition */
+
+#admin_mnu_bar
+{
+    height:50px;
+    float: right;
+    width:10%;
+    margin:0px auto 0  auto;
+    text-align:left;
+    background:#000000;
+}
+
+/* The menu is basically a list */
+#admin_mnu_bar ul
+{
+    float:right;
+    list-style:none;
+    margin: 6px 0 0 8px;
+}
+
+#admin_mnu_bar ul li
+{
+    float:right;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    padding:6px 8px;
+}
+
+#admin_mnu_bar ul li a
+{
+     color: white;
+     text-decoration: none;
+}
+
+#admin_mnu_bar ul li a:hover
+{
+    text-decoration: underline;
+}
+/* End of Menu Definition */
+
+/* Checkbox Turnier Bedingungen */
+
+.chkbox {
+  padding-left: 10px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+/* Player Table List */
+
+#players {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  border-collapse: collapse;
+  width: 70%;
+  margin: 15px;
+}
+
+#players .confirmed td {
+  color: #000000;
+}
+
+#players .waitlisted td {
+  color: #999999;
+}
+
+#players td, #players th {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+#players td a, a:visited {
+  color:#09139b;
+}
+
+#players tr:nth-child(even){background-color: #f2f2f2;}
+
+#players tr:hover {background-color: #ddd;}
+
+#players th {
+  padding-top: 9px;
+  padding-bottom: 9px;
+  text-align: left;
+  background-color:#F79E02;
+  color: white;
+}
+
+/* Player Table List End */
+
+/* Sortable Tables */
+table.sortable
+{
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  border-collapse: collapse;
+  width: 95%;
+  margin: 15px;
+}
+
+table.sortable th, table.sortable td {
+  border: 1px solid #ddd;
+  padding: 6px;
+}
+
+table.sortable td a, a:visited {
+  text-decoration: none;
+  color:#09139b;
+}
+
+table.sortable tr:nth-child(even){background-color: #f2f2f2;}
+
+table.sortable thead {
+  padding-top: 9px;
+  padding-bottom: 9px;
+  text-align: left;
+  background-color:#F79E02;
+  color: white;
+}
+/* Dash Board Table Start */
+
+table.dashboard {
+  text-align: left;
+  line-height: 30px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #0074E1;
+  width: 90%;
+  margin: 25px auto;
+  border-radius: .25rem;
+}
+
+table.dashboard thead tr:first-child {
+  background: #0074E1;
+  color: #fff;
+  border: none;
+}
+
+table.dashboard th:first-child,
+td:first-child {
+  padding: 0 15px 0 20px;
+}
+
+table.dashboard th {
+  font-weight: 500;
+}
+
+table.dashboard thead tr:last-child th {
+  border-bottom: 3px solid #ddd;
+}
+
+table.dashboard tbody tr:hover {
+  background-color: #f2f2f2;
+  cursor: default;
+}
+
+table.dashboard tbody tr:last-child td {
+  border: none;
+}
+
+table.dashboard tbody td {
+  border-bottom: 1px solid #ddd;
+}
+
+table.dashboard td:last-child {
+  text-align: right;
+  padding-right: 10px;
+}
+
+/* Dash Board Table End */
+
+body {
+    background:#dfe8ec url(/images/page_bg.png) repeat-x 0 0;
+    text-align:center;
+    font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+}
+
+#container {
+  margin: 0 auto; width: 940px; text-align:left;
+  background:#F7F9FB;
+}
+
+h1 {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 36px;
+  margin: 15px;
+}
+
+h2 {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 24px;
+  margin: 15px;
+}
+
+h3 {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 18px;
+  margin: 15px;
+}
+
+h4 {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  margin: 15px;
+}
+
+h4 a, a:visited, a:hover {
+  text-decoration: none;
+  color: #0074E1;
+}
+
+p {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  margin: 15px;
+}
+
+#index_button_container
+{
+    float:top;
+    height:75px;
+    width:940px;
+    margin:0px auto 0  auto;
+    text-align:left;
+}
+
+.blue-button {
+  margin: 15px;
+  background-color: #0074E1;
+  border: none;
+  color: white;
+  text-decoration: none;
+  padding: 12px 18px;
+  text-align: center;
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.blue-button a, a:visited, a:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.orange-button {
+  margin: 15px;
+  background-color: #F79E02;
+  border: none;
+  color: white;
+  padding: 12px 18px;
+  text-align: center;
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.red-button {
+  margin: 15px;
+  background-color: #c04203;
+  border: none;
+  color: white;
+  padding: 12px 18px;
+  text-align: center;
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 9px;
+}
+
+.button:hover {
+      background-color: #1B9CE5
+}
+
+.input[type="text"], input[type="email"], input[type="password"], select {
+  width: 300px;
+  padding: 9px 15px;
+  margin: 2px 15px 8px 15px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 12px;
+}
+
+.input.long[type="text"] {
+  width: 900px;
+}
+
+.input.short[type="text"] {
+  width: 140px;
+}
+
+.input[type="number"] {
+  width: 75px;
+  padding: 9px 15px;
+  margin: 2px 15px 8px 15px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 12px;
+}
+
+.dashboard-headings  {
+  width:100%;
+  margin-left:15px;
+  height:120px;
+}
+
+.dashboard-menu-left  {
+  width:65%;
+  margin-left:20px;
+  padding:15px 0px;
+  float:left;
+}
+
+.dashboard-menu-right  {
+  width:20%;
+  margin-right: 20px;
+  padding:15px 20px;
+  float:right;
+  text-align: right;
+  background-image: url("/images/user.svg");
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: right center;
+  border-bottom: 1px solid #ccc;
+}
+
+.dashboard-menu-left a {
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 12px;
+  color:#0074E1;
+  text-decoration: none;
+  text-align: right;
+  padding: 5px 5px;
+}
+
+.dashboard-menu-left a:hover {
+  font-weight: bold;
+}
+
+/* Drop Down Menu on the Dash Board Page */
+
+/* Dropdown Button */
+.dropbtn {
+  border: none;
+  padding: 5px;
+  background:#F7F9FB;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 180px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  padding: 4px 16px;
+  text-decoration: none;
+  display: block;
+  color:#0074E1;
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 12px;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Bar Chart on the dashboard page */
+.chart {
+  width:160px;
+  height:240px;
+  border-radius:4px;
+  box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.15);
+  margin-top:20px;
+  margin-left:20px;
+  float:left;
+}
+
+.chart.wide2 {
+  width: 340px;
+}
+
+.chart.wide3 {
+  width: 520px;
+}
+
+/* the footer */
+#footer_bar
+{
+    clear:both;
+    height:40px;
+    width:940px;
+    background:url(/images/footer_bg.png) repeat-x 0 0;
+}
+
+#footer_bar h3
+{
+    font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+    font-size: 12px;
+    color:#999999;
+    padding:14px 0 0 14px;
+}
+
+#footer_bar a
+{
+  font-family: IBMPlexSans-Regular,UbuntuRegular,sans-serif;
+  font-size: 12px;
+  color:#BBBBBB;
+  text-decoration: none;
+}
+
+#footer_bar a:hover
+{
+    color: #ff9a66;
+}
+
+/* Dash Board Tiles */
+
+.tile {
+  width:160px;
+  height:180px;
+  border-radius:4px;
+  box-shadow: 2px 2px 4px 0 rgba(0,0,0,0.15);
+  margin-top:20px;
+  margin-left:20px;
+  float:left;
+}
+
+.tile.wide {
+  width: 340px;
+}
+
+.tile .header {
+  height:120px;
+  background-color:#f4f4f4;
+  border-radius: 4px 4px 0 0;
+  color:white;
+  font-weight:300;
+}
+
+.tile.wide .header .left, .tile.wide .header .right {
+  width:160px;
+  float:left;
+}
+
+.tile .header .count {
+  font-size: 48px;
+  text-align:center;
+  padding:10px 0 0;
+}
+
+.tile .header .title {
+  font-size: 20px;
+  text-align:center;
+}
+
+.tile .body {
+  height:60px;
+  border-radius: 0 0 4px 4px;
+  color:#333333;
+  background-color:white;
+}
+
+.tile .body .title {
+    text-align:center;
+    font-size:20px;
+    padding-top:2%;
+}
+
+.tile.wide .body .title {
+  padding:4%;
+}
+
+.tile.green .header {
+  background: linear-gradient(to bottom right, #609931, #87bc27);
+}
+
+.tile.green .body {
+  color: #609931;
+}
+
+.tile.orange .header {
+  background: linear-gradient(to bottom right, #ef7f00, #f7b200);
+}
+
+.tile.orange .body {
+  color: #ef7f00;
+}
+
+.tile.blue .header {
+  background: linear-gradient(to bottom right, #1f6abb, #4f9cf2);
+}
+
+.tile.blue .body {
+  color: #1f6abb;
+}
+
+.tile.ltgreen .header {
+  background: linear-gradient(to bottom right, #0aa361, #1adc88);
+}
+
+.tile.ltgreen  .body {
+  color: #0aa361;
 }

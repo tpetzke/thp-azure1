@@ -1,0 +1,21 @@
+<!-- The main menu when a list of the tournament groups is shown, requires the tournament data in the request -->
+        <div id="main_mnu_bar">
+            <ul>
+            <li id="announcement"><a href="<%= tournament.url %>">Ausschreibung</a></li>
+            <% for(i = 0; i < tournament.groups.length; i++) { %> 
+                <li id="<%= tournament.groups[i] %>"><a href="/group?idx=<%=i%>"><%= tournament.groups[i] %></a></li>
+            <% } %> 
+            <li id="clublist"><a href="/clublist">Vereine</a></li>
+            </ul>
+        </div>
+        <div id="admin_mnu_bar">
+            <ul>
+            <% if (userid) { %>
+                <li id="logout"><a href="/logout">Logout</a></li>
+            <% } else { %>        
+            <li id="Login"><a href="/login">Login</a></li>
+            <% } %>
+            </ul>
+        </div>
+        <img src="/images/chess-banner.jpg" alt="" width="940" height="243">
+        <!-- The main menu end -->

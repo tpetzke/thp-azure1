@@ -4,41 +4,52 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', async function(req, res, next) {
 
-  const CosmosClientInterface = require("@azure/cosmos").CosmosClient;
-
-  //DB Id
-  const dbId = "thpapp1";
-  const collectionId = "players";
-
-  // connection strings
-  const endpoint = "https://players.documents.azure.com:443/";
-  const authKey = "0RRyr4FxX7h9qj5AQsRFv0JQByOdfDF4ddrb52S5xETCq7AV3JqDgns4c560E7ih2CAhZZf8lCJ9QvplTuTJGg==";
-
-  // Instatiate client
-  const cosmosClient = new CosmosClientInterface("AccountEndpoint="+endpoint+";AccountKey="+authKey+";");
- 
   try {
-    // Open reference to DB
-    const dbResponse = await cosmosClient.databases.createIfNotExists({id: dbId});
-    var db = dbResponse.database;
-    const container =  db.container(collectionId);
+    // Open reference to DB collection <players>
+    const container =  req.container;
 
-    console.log(container);
+    var querySpec;
+    querySpec = {
+      query: "SELECT * FROM c where c.tournament.name > ' '"
+    };
 
-    const querySpec = {
-      query: "select * from c"
+    const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+  
+    querySpec = {
+      query: "select value count(1) from c where c.Firstname > ''"
     };
 
     const { resources: items } = await container.items.query(querySpec).fetchAll();
     console.log(items);
 
-    res.render('index', { title: 'Express WebSite', db: dbId, collection: collectionId, players: items});
+    res.render('index', { tournament: tournaments[0].tournament, playercnt: items });
   } catch (error)
   {
     console.log(error);
     res.render('index', { title: 'Error' });
   }
 
+});
+
+/* GET clublist page.
+Read the Tournament data and the Club List from the View to assemble an overview page of clubs */
+router.get('/clublist', async function(req, res, next) {
+  
+  // Open reference to DB collection <players>
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+
+  querySpec = {
+    query: "SELECT count(1) as val, c.Club as key FROM c where c.Club > '' group by c.Club"
+  };
+  const { resources: clubs } = await container.items.query(querySpec).fetchAll();
+  console.log(clubs);
+  res.render('clublist', { tournament: tournaments[0].tournament, clubs:clubs });
 });
 
 module.exports = router;

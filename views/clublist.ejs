@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angemeldete Vereine</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h3>Gemeldete Spieler pro Verein</h3>
+        <table id="players" style="width:60%;">
+            <tr>
+              <th style="text-align:center">Nr</th>
+              <th>Verein</th>
+              <th style="text-align:center">Spieler</th>
+            </tr>
+            <% var totals = 0;
+               for(i = 0; i < clubs.length; i++) { totals += clubs[i].val; %>
+                <tr> 
+                <td style="text-align:center"><%= i+1 %></td>
+                <td><a href="/club?club=<%=clubs[i].key%>"><%= clubs[i].key %></a></td>
+                <td style="text-align:center"><%= clubs[i].val %></td>
+                </tr>
+            <% } %>
+        </table>
+        <p>Aktuell gemeldete Spieler: <%=totals%></p> 
+        <div id="index_button_container">
+        <form action="/">
+          <input type="submit" class="blue-button" value="Zurück zur Homepage" />
+        </form>
+        </div>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>
