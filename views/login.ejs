@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Turnierleiter Anmeldung</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+      <div  id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h1><%= tournament.name %></h1>
+        <h3>Turnierleiter Anmeldung</h3>
+        <p><%=message%></p>
+        <form id="formLogin" name="formLogin" method="post" action="/login">
+          <div style="float:left;margin-right:20px;">
+          <label for="inputUserID">User ID</label>
+          <input id="inputUserId" class="input" type="text" placeholder="User ID" name="userid" required />
+          </div>
+          <div style="float:left">
+          <label for="inputPassword">Passwort</label>
+          <input id="inputPassword" class="input" type="password" placeholder="Password" name="password" required />
+          </div>
+          <br style="clear:both">
+          <input type="submit" class="orange-button" value="Anmelden" />
+        </form>
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>

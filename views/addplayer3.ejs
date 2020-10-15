@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anmeldung überprüfen</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script> 
+      // Function to check Whether both passwords match 
+      function checkAccept() { 
+          if (document.getElementById("accept").checked) {
+            return true;
+          } else { 
+            alert ("\nSie müssen die Turnierbedingungen akzeptieren!"); 
+            return false; 
+          }          
+      } 
+    </script>
+  </head>
+  <body>
+     <form id="formVerify" name="verifyuser" method="post" onSubmit="return checkAccept()" action="/player/addplayer">
+        <input type="hidden" id="title" name="title" value="<%=Title%>">
+        <input type="hidden" id="firstname" name="firstname" value="<%=Firstname%>">
+        <input type="hidden" id="lastname" name="lastname" value="<%=Lastname%>">
+        <input type="hidden" id="yob" name="yob" value="<%=YOB%>">
+        <input type="hidden" id="dwz" name="dwz" value="<%=DWZ%>">
+        <input type="hidden" id="elo" name="elo" value="<%=ELO%>">
+        <input type="hidden" id="country" name="country" value="<%=Country%>">
+        <input type="hidden" id="email" name="email" value="<%=email%>">
+        <input type="hidden" id="group" name="group" value="<%=Group%>">
+        <input type="hidden" id="sex" name="sex" value="<%=Sex%>">
+        <input type="hidden" id="club" name="club" value="<%=Club%>">
+        <input type="hidden" id="datetime" name="datetime" value="<%=datetime%>">
+        <input type="hidden" id="capacity" name="capacity" value="<%=capacity%>">
+        <input type="hidden" id="dewisid" name="dewisid" value="<%=dewisid%>">
+
+        <% var geschlecht = "Männlich"; if (Sex=="female") geschlecht="Weiblich"; %>
+        
+        <div  id="container">
+            <img src="/images/chess-banner-thin.jpg" alt="" width="940" height="140">
+            <br>
+            <h1>Anmeldedaten überprüfen</h1>
+            <div style="float:left; width:350px; margin-right:20px;">
+              <h2>Schritt 3 von 3</h2>
+              <table id="players" style="width:100%">
+                  <tr>
+                  <td>FIDE Titel</td>
+                  <td><%=Title%></td>
+                  </tr>
+                  <tr>
+                  <td>Vorname</td>
+                  <td><%=Firstname%></td>
+                  </tr>
+                  <tr>
+                  <td>Nachname</td>
+                  <td><%=Lastname%></td>
+                  </tr>
+                  <tr>
+                  <td>Geburtsjahr</td>
+                  <td><%=YOB%></td>
+                  </tr>
+                  <tr>
+                  <td>Geschlecht</td>
+                  <td><%=geschlecht%></td>
+                  </tr>
+                  <tr>
+                  <td>Email</td>
+                  <td><%=email%></td>
+                  </tr>
+                  <tr>
+                  <td>Verein</td>
+                  <td><%=Club%></td>
+                  </tr>
+                  <tr>
+                  <td>DWZ</td>
+                  <td><%=DWZ%></td>
+                  </tr>
+                  <tr>
+                  <td>ELO</td>
+                  <td><%=ELO%></td>
+                  </tr>
+                  <tr>
+                  <td>Land</td>
+                  <td><%=Country%></td>
+                  </tr>
+                  <tr>
+                      <td>Turniergruppe</td>
+                      <td><%=Group%></td>
+                  </tr>
+                  <tr>
+                      <td>Meldezeitpunkt</td>
+                      <% var tm = Date(datetime);
+                        var ts = tm.toString().slice(4,15); %>
+                      <td><%=ts%></td>
+                  </tr>
+              </table>
+              <input type="checkbox" name="accept" id="accept" value="accept" style="float:left;margin-left:20px;margin-top:10px;">
+              <label for="accept" class="chkbox" style="float:left;margin:6px;">Ich akzeptiere die Turnierbedingungen</label>
+            </div>
+            <div style="float:left; margin-left:20px; margin-bottom:30px; width:500px;">
+            <h3>Turnierbedingungen</h3> 
+            <h4>Haftung</h4>
+            Haftung trägt jeder Teilnehmer für seine Person selbst. Der Veranstalter/Ausrichter übernimmt keinerlei Haftung (z.B. für Personen- oder Sachschäden jeglicher 
+            Art bzw. für abhanden gekommene Wertsachen), auch nicht gegenüber Dritten. Die Aufsichtspflicht bei Kindern und Jugendlichen liegt bei den 
+            Eltern oder den betreuenden Übungsleitern.
+            <h4>Datenschutz</h4>
+            Mit der Anmeldung zum Turnier erklärt sich der Teilnehmer bzw. die Erziehungsberechtigten des Teilnehmers einverstanden, dass die im Anmeldeprozess erhobenen
+            personenbezogenen Daten des Teilnehmers maschinell gespeichert werden können und für die Organisation des Turniers verarbeitet und genutzt werden dürfen. 
+            Dies schließt auch die Nutzung der angegebenen E-Mailadresse zur Informationsverteilung bzgl. des Turniers ein. 
+            <h4>Fotos und Videoaufnahmen</h4>
+            Mit der Anmeldung zum Turnier stimmt der Teilnehmer bzw. die Erziehungsberechtigten des Teilnehmers zu, dass der Teilnehmer während seines Aufenthaltes am 
+            Veranstaltungsort fotografiert und gefilmt wird und diese Aufnahmen durch den Veranstalter/Ausrichter oder Dritte an beliebiger Stelle in Print- und/oder 
+            elektronischen Medien (wie Webseite Veranstalter/Ausrichter und Turnier-DVD) verwendet werden dürfen. Dies gilt auch nach Beendigung des Turnieres.
+            Es besteht jederzeit die Möglichkeit diese Freigabe zu widerrufen. Sind die Aufnahmen im Internet verfügbar, erfolgt die Entfernung, soweit dies dem 
+            Veranstalter/Ausrichter möglich ist.
+            </div>
+            <br style="clear:both">
+            <div id="index_button_container">
+            <button id="btnSubmit" class="blue-button" name="submitted" value="save">Anmeldung abschliessen</button>
+            <button id="btnSubmit" class="red-button" name="submitted" value="cancel">Anmeldung abbrechen</button>
+            </div>
+        </form>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

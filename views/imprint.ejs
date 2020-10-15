@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Impressum</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+      <div  id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h1><%= tournament.name %></h1>
+        <h2>Impressum</h2>
+        <p>
+        <%
+        var lines = tournament.imprint.split(',');
+        for(i=0; i<lines.length;i++) {
+            parts = lines[i].split(':');
+            for (j=0; j< parts.length; j++) { %>
+                
+                <%-(j == 0 && parts.length > 1)?"<b>":""%><%=parts[j]%><%-(j == 0 && parts.length > 1)?":</b>":""%>    
+            <%} %>
+            <br>
+        <% } %>
+        </p>
+        <br>
+        <a href='/' class="blue-button">Zurück</a>
+        <br><br>
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>

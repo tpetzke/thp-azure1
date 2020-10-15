@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Turnieranmeldung</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div  id="container">
+        <img src="/images/chess-banner-thin.jpg" alt="" width="940" height="140">
+        <h1>Turnieranmeldung für Spieler</h1>
+        <h2>Schritt 2 von 3</h2>
+        <form id="formAddUser" name="adduser" method="post" action="/player/verifyplayer">
+            <% var id=""; if (dewis.length) id = dewis[0].id; %>
+            <input id="dewisid" name="dewisid" type="hidden" value="<%=id%>">
+            <input id="capacity" name="capacity" type="hidden" value="<%=tournament.capacity%>">
+            <div style="float:left;">
+            <label for="inputTitle">FIDE Titel</label>
+            <input style="width:75px" id="inputTitle" class="input" type="text" placeholder="Titel" name="title" value="<%=dewis.length?dewis[0].Titel:""%>" />
+            </div>
+            <div style="float:left;margin-right:20px;">
+            <label for="inputFirstname">Vorname</label>
+            <input style="width:195px" id="inputFirstname" class="input" type="text" placeholder="Vorname" name="firstname" value="<%= firstname %>" />
+            </div>
+            <div style="float:left;">
+              <label for="inputLastname">Nachname</label>
+              <input id="inputLastname" class="input" type="text" placeholder="Nachname" name="lastname" value="<%= lastname %>"/>
+            </div>  
+            <br style="clear:both">
+            
+            <% var dwz = ""; if (dewis.length && dewis[0].DWZ) dwz = dewis[0].DWZ;
+               var elo = ""; if (dewis.length && dewis[0].ELO) elo = dewis[0].ELO; %>
+           
+            <div style="float:left;">
+            <label for="inputDWZ">DWZ</label>
+            <input id="inputDWZ" class="input" type="number" placeholder="DWZ" name="dwz" value="<%=dwz%>"/>
+            </div>
+            <div style="float:left;">
+            <label for="inputELO">ELO</label>
+            <input id="inputELO" class="input" type="number" placeholder="ELO" name="elo" value="<%=elo%>"/>
+            </div>
+            <div style="float:left;">
+            <label for="inputYOB">Geburtsjahr (4-stellig)</label>
+            <input id="inputYOB" class="input" type="number" name="YOB" min="1900" value="<%=dewis.length?dewis[0].YOB:""%>" required/>
+            </div>
+            <div style="float:left;margin-left:34px;">
+            <label for="inputCountry">Land</label>
+            <input style="width:75px;" id="inputCountry" class="input" type="text" name="country" value="<%=dewis.length?dewis[0].Country:"GER"%>"/>
+            </div>
+            <br style="clear:both;" />
+            
+            <% var selMale = "selected";
+               var selFemale = ""; 
+               if (dewis.length && dewis[0].Sex && dewis[0].Sex=="W") 
+               {
+                 selMale = "";
+                 selFemale = "selected"
+               } %>
+            <div style="float:left;margin-right:20px;">
+            <label for="selectGroup">Turniergruppe</label>
+            <select id="selectGroup" name="group" required>
+            <% if (tournament.groups.length > 1) { %>
+            <option selected="selected" value="">Turniergruppe</option>
+            <% } %>
+            <% for(i = 0; i < tournament.groups.length; i++) { %> 
+                    <option value="<%= tournament.groups[i] %>"><%= tournament.groups[i] %></option>
+            <% } %>
+            </select>
+            </div>
+            <div style="float:left">
+            <label for="selectSex">Geschlecht</label>
+              <select id="selectSex" name="sex">
+                    <option value="male" <%=selMale%>>Männlich</option>
+                    <option value="female" <%=selFemale%>>Weiblich</option>
+            </select>
+            </div>
+            <br style="clear:both">
+
+            <% var club = ""; if (dewis.length && dewis[0].Club) club = dewis[0].Club; %>
+
+            <div style="float:left;margin-right:20px;">
+            <label for="inputVerein">Verein</label>
+            <input id="inputVerein" class="input" type="text" placeholder="Verein" name="club" value="<%=club%>" />
+            </div>
+            <div style="float:left">
+              <label for="inputEmail">Email</label>
+              <input id="inputEmail" class="input" type="email" placeholder="Email" name="email" required/>
+            </div>
+            <br style="clear:both">
+            <button id="btnSubmit" class="blue-button">Anmeldung überprüfen</button>
+        </form>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Turnieranmeldung</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div  id="container">
+        <img src="/images/chess-banner.jpg" alt="" width="940" height="243">
+        <h1>Turnieranmeldung für Spieler</h1>
+        <h2>Schritt 1 von 3</h2>
+        <p>Bitte geben Sie Vornamen und Nachnamen des Spielers ein und fahren mit der Anmeldung fort.</p>
+        <form id="formAddUser" name="adduser" method="post" action="/player/lookup_player">
+            <input id="inputFirstname" class="input" type="text" placeholder="Vorname" name="firstname" />
+            <input id="inputLastname" class="input" type="text" placeholder="Nachname" name="lastname" />
+            <input id="inputDuplicateCheck" class="input" type="hidden" name="duplicatecheck" value="true"/>
+            <button id="btnSubmit" class="blue-button">Weiter zur Registrierung</button>
+        </form>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

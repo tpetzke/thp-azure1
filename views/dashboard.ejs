@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Turnier Dashboard</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/Chart.min.js"></script>
+  </head>
+  <body>
+      <div id="container">
+        <img src="/images/chess-banner-thin.jpg" alt="" width="940" height="140">
+        <div class="dashboard-menu-left">
+            <a href="/admin/setup">Turnier Setup</a>
+            <a href="/admin/allplayer">Spieler Liste</a>
+            <a href="/admin/userlist">Nutzer-Verwaltung</a>
+            <div class="dropdown">
+                <button class="dropbtn">SwissChess-Export</button>
+                <div class="dropdown-content">
+                  <% for (i=0; i < trnInfo.getGroupCnt(); i++) { %>  
+                    <a href="/admin/download/group/<%=trnInfo.getGroups()[i]%>"><%=trnInfo.getGroups()[i]%></a>
+                  <% } %>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-menu-right">
+            <div class="dropdown">
+                <button class="dropbtn"><%=userid%>&nbsp;&nbsp;</button>
+                <div class="dropdown-content">
+                  <a href="/admin/password">Passwort ändern</a>
+                  <a href="/logout">Logout</a>
+                </div>
+            </div> 
+        </div>
+
+        <div class="dashboard-headings">
+          <h1>Turnierleiter Dashboard</h1>
+          <h3><%=trnInfo.getTournamentName()%></h3>
+        </div>
+        <div class="container">
+            <div class="tile blue">
+                <div class="header">
+                    <div class="count"><%=trnInfo.getPlayerCnt()%></div>
+                    <div class="title">Spieler</div>
+                </div>
+                <div class="body">
+                    <div class="title">bereits gemeldet</div>
+                </div>
+            </div>
+            <div class="tile orange">
+                <div class="header">
+                    <div class="count"><%=trnInfo.getStatusCnt("waitlisted")%></div>
+                    <div class="title">Spieler</div>
+                </div>
+                <div class="body">
+                    <div class="title">auf Warteliste</div>
+                </div>
+            </div>
+            <div class="tile green">
+                <div class="header">
+                    <div class="count"><%=trnInfo.getTournamentBudget()%></div>
+                    <div class="title">Euro</div>
+                </div>
+                <div class="body">
+                    <div class="title">Turnierbudget</div>
+                </div>
+            </div>
+            <div class="tile green">
+                <div class="header">
+                    <div class="count"><%=trnInfo.getTournamentIncome()%></div>
+                    <div class="title">Euro</div>
+                </div>
+                <div class="body">
+                    <div class="title">Einnahmen</div>
+                </div>
+            </div>
+            
+            <div class="tile orange">
+                <div class="header">
+                    <div class="count"><%=trnInfo.getTournamentOverdueCnt()%></div>
+                    <div class="title">Einzahlungen</div>
+                </div>
+                <div class="body">
+                    <div class="title">überfällig</div>
+                </div>
+            </div>
+        </div>
+        <br style="clear:both">
+
+        <div class="chart wide2">
+            <table class="dashboard">
+                <thead>
+                    <th>Spieler Details</th>
+                    <th>Wert</th>
+                </thead>
+                <tbody>
+                    <tr><td>Männer</td><td><%=trnInfo.getSex("male")%></td></tr>
+                    <tr><td>Männer DWZ &Oslash;</td><td><%=trnInfo.getAverageDWZfor("male")%></td></tr>
+                    <tr><td>Frauen</td><td><%=trnInfo.getSex("female")%></td></tr>
+                    <tr><td>Frauen DWZ &Oslash;</td><td><%=trnInfo.getAverageDWZfor("female")%></td></tr>
+                    <tr><td>Turnier DWZ &Oslash;</td><td><%=trnInfo.getAverageDWZfor("tournament")%></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="chart wide3">
+        <canvas id="bar-chart-curve" width="470" height="200"></canvas>
+        <script>
+
+        var canvas = document.getElementById('bar-chart-curve');
+        var data = {
+                labels: ["<700", "900", "1100", "1300", "1500", "1700", "1900", "2100", "2300", ">2300"],
+                datasets: [{
+                    data: <%-JSON.stringify(trnInfo.getPlayersperDWZBand())%>,
+                    backgroundColor: ["#5899DA", "#5899DA", "#5899DA", "#5899DA", "#5899DA", "#5899DA", "#5899DA", "#5899DA", "#5899DA", "#5899DA"]
+                }]
+            };
+        var option = {
+        tooltips: { enabled: true },
+            legend: { display: false },
+            title: {
+                        display: true,
+                        text: 'Spieler pro DWZ Band'
+                    },
+            scales: {
+            yAxes:[{
+                    display:true
+            }],
+            xAxes:[{
+                barPercentage: 1.0,
+                categoryPercentage: 1.0,
+                    gridLines: {
+                    display:false
+                },
+                scaleLabel: {
+                display: false,
+                labelString: 'DWZ'
+            }
+            }]
+        }
+        };
+
+        var myBarChart = Chart.Bar(canvas,{
+	    data:data,
+        options:option
+        });
+        </script>
+        </div>
+
+        <div class="chart wide2">
+            <table class="dashboard">
+                <thead>
+                    <th>Top 5 Vereine nach Meldungen </th>
+                    <th>Spieler</th>
+                </thead>
+                <tbody>
+                    <% for (i=0; i < 5 && i < trnInfo.getClubCnt(); i++) { %>
+                    <tr>
+                        <td><%-trnInfo.getTopClubNameByIdx(i)%></td>
+                        <td><%-trnInfo.getTopClubCountByIdx(i)%></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="chart wide3">
+            <canvas id="bar-chart" width="470" height="200"></canvas>
+            <script>
+        
+            // Bar chart
+            c = new Chart(document.getElementById("bar-chart"), {
+                type: 'bar',
+                data: {
+                labels: <%-JSON.stringify(trnInfo.getTop5ClubNames())%>,
+                datasets: [
+                    {
+                    label: "Top 5 Vereine",
+                    backgroundColor: ["#5899DA", "#E8743B","#19A979","#ED4A7B","#945ECF","#13A4B4","525DF4","#BF399E","#6C8893","#EE6868","2F6497"],
+                    data: <%-JSON.stringify(trnInfo.getTop5ClubCounts())%>
+                    }
+                ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Top 5 Vereine'
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                callback: function(value) {
+                                    if (value.length > 10) {
+                                        return value.substr(0, 10) + '...'; //truncate
+                                    } else {
+                                        return value
+                                    }
+
+                                },
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+            </script>
+        </div>
+            
+        <div class="chart wide2">
+            <table class="dashboard">
+                <thead>
+                    <th>Top 5 Spieler</th>
+                    <th style="text-align:center">Attr</th>
+                    <th style="text-align:center">ELO</th>
+                    <th style="text-align:center">DWZ</th>
+                </thead>
+                <tbody>
+                    <% for (i=0; i < 5 && i < trnInfo.getPlayerCnt(); i++) { %>
+                    <tr>
+                        <td><%-trnInfo.getPlayerNameByIdx(i)%></td>
+                        <td style="text-align:center"><%-trnInfo.getPlayerAttrByIdx(i)%></td>
+                        <td style="text-align:center"><%-trnInfo.getPlayerELOByIdx(i)%></td>
+                        <td style="text-align:center"><%-trnInfo.getPlayerDWZByIdx(i)%></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="chart wide3">
+            <canvas id="bar-chart-2" width="470" height="200"></canvas>
+            <script>
+            <% var label_size = 99; 
+               if (trnInfo.getGroupNames().length > 2) label_size = 15;
+               if (trnInfo.getGroupNames().length > 3) label_size = 10;
+            %>
+            // Bar chart
+            c = new Chart(document.getElementById("bar-chart-2"), {
+                type: 'bar',
+                data: {
+                labels: <%-JSON.stringify(trnInfo.getGroupNames())%>,
+                datasets: [
+                    {
+                    label: "Turniergruppen (Spieler)",
+                    backgroundColor:  ["#5899DA", "#E8743B","#19A979","#ED4A7B","#945ECF","#13A4B4","525DF4","#BF399E","#6C8893","#EE6868","2F6497"],
+                    data: <%-JSON.stringify(trnInfo.getPlayerPerGroup())%>
+                    }
+                ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Spieler pro Turniergruppe'
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                callback: function(value) {
+                                    if (value.length > <%=label_size%>) {
+                                        return value.substr(0, <%=label_size%>) + '...'; //truncate
+                                    } else {
+                                        return value
+                                    }
+
+                                },
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+            </script>
+        </div>
+        <br style="clear: both">
+
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>

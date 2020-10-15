@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Willkommen</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div  id="container">
+        <img src="/images/chess-banner.jpg" alt="" width="940" height="243">
+        <br>
+        <h1>Willkommen im Turnier, <%= (player.Title !== "" ? player.Title + " " : "") + player.Firstname + " " + player.Lastname %></h1>
+        <h3>Die Anmeldung erfolgte für die Turniergruppe <a href="<%=links.group%>" style="text-decoration: none;color: #0074E1;"><%= Group %></a></h3>
+        <table id="players">
+            <tr>
+            <th>Information</th>
+            <th>Status</th>
+            </tr>
+            <tr>
+              <td>Anmelde-Nummer</td>
+              <td><%=playercnt+1%></td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <% var ss = "bestätigt"; if (status == "waitlisted") ss = "Warteliste"; %>
+              <td><%=ss%></td>
+            </tr>
+            <% if (status == "waitlisted") { %>
+              <tr>
+                  <td>Position</td>
+                  <td><%=playercnt - capacity + 1%></td>
+              </tr>
+            <% } %>
+        </table>    
+        <% if (status == "confirmed" && tournament.paymentdeadline != 0 && tournament.entryfee > 0) { %>
+        <h4>Bitte überweisen Sie das Startgeld von <%=tournament.entryfee%> € innerhalb von <%=tournament.paymentdeadline%> Tagen auf folgendes Konto</h4>
+        <table>
+          <tbody>
+            <tr><td><b>Empfänger:</b></td><td><%=tournament.recipient%></td>
+            <tr><td><b>IBAN:</b></td><td><%=tournament.IBAN%></td></tr>
+            <tr><td><b>Verwendungszweck:</b></td><td><%=tournament.shortname%>, <%=player.Firstname + " " + player.Lastname%></td></tr>
+          </tbody>
+        </table>
+        <h4>Bei Nichtüberweisung verfällt Ihre Anmeldung gegebenenfalls und Sie müssen sich erneut anmelden!</h4>
+         <% } %>
+        <div id="index_button_container">
+        <br>
+        </p>
+        <a href='/' class="blue-button">Zurück zur Homepage</a>
+        </div>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Meldeliste <%= GroupName %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h3>Meldeliste <%= GroupName %></h3>
+        <table id="players">
+            <tr>
+              <th style="text-align:center">SNr</th>
+              <th>Spieler</th>
+              <th style="text-align:center">A</th>
+              <th>Verein</th>
+              <th style="text-align:center">ELO</th>
+              <th style="text-align:center">DWZ</th>
+              <th style="text-align:center">Geburtsjahr</th>
+              <% if (tournament.paymentdeadline != "0") { %><th style="text-align:center">Startgeld</th> <% } %>
+            </tr>
+            <% for (i=0; i < data.length; i++) { 
+              var a = "";
+              if (data[i].Sex == "female") a = "w";
+              var ss = "confirmed";
+              if (data[i].status) ss = data[i].status;
+              var ps = "bezahlt";
+              if (data[i].paymentstatus == "open") ps = "offen";
+              if (data[i].paymentstatus == "free") ps = "frei";
+              if (data[i].status == "waitlisted") ps = "";
+              %>
+            <tr class="<%=ss%>">
+              <td style="text-align:center"><%= i+1 %></td>
+              <td><%= (data[i].Title != "" ? data[i].Title +" " : "") + data[i].Firstname + " " + data[i].Lastname %></td>
+              <td style="text-align:center"><%= a %></td>
+              <td><%= data[i].Club %></td>
+              <td style="text-align:center"><%= data[i].ELO %></td>
+              <td style="text-align:center"><%= data[i].DWZ %></td>
+              <td style="text-align:center"><%= data[i].YOB %></td>
+              <% if (tournament.paymentdeadline != "0") { %><td style="text-align:center"><%=ps%></td> <% } %>
+            </tr>
+            <% } %>  
+          </table>
+        <div id="index_button_container">
+        <form action="/">
+          <input type="submit" class="blue-button" value="Zurück zur Homepage" />
+        </form>
+        </div>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

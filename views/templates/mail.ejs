@@ -1,0 +1,31 @@
+    Sehr geehrte<%-player.Sex=="male"?"r":""%> <%=player.Firstname + " " + player.Lastname%>,<br>
+    <br>
+    Ihre Anmeldung für das <b><%=tournament.name%></b> Turnier in <%=tournament.location%> ist bei uns angekommen. Vielen Dank.<br>
+    Sie werden nun auch in der Teilnehmerliste für die Turniergruppe <a href="<%=links.group%>"><%= player.Group %></a> geführt. <br>
+    <br>
+
+    Anmelde-Nummer: <%=playercnt+1%><br>
+    <% var ss = "bestätigt"; if (player.status == "waitlisted") ss = "Warteliste"; %>
+    Status: <%=ss%><br>
+    <% if (player.status == "waitlisted") { %>
+    Position: <%=playercnt - tournament.capacity + 1%><br>
+    <% } %>
+    <br>
+     <% if (player.status == "confirmed" && tournament.paymentdeadline != 0 && tournament.entryfee > 0) { %>
+    Bitte überweisen Sie das Startgeld von <b><%=tournament.entryfee%> € </b>innerhalb von <%=tournament.paymentdeadline%> Tagen auf folgendes Konto<br>
+    <br>
+    <b>Empfänger:</b> <%=tournament.recipient%><br>
+    <b>IBAN:</b> <%=tournament.IBAN%><br>
+    <b>Verwendungszweck:</b> <%=tournament.shortname%>, <%=player.Firstname + " " + player.Lastname%><br>
+    <br>
+    Bei Nichtüberweisung verfällt Ihre Anmeldung gegebenenfalls und Sie müssen sich erneut anmelden!<br>
+    <br>
+    <% } %>
+    Sie können ihre persönlichen Anmelde-Daten unter folgendem Link verwalten:<br>
+    <a href='<%=links.player%>'><%=links.player%></a><br>
+    <br>
+    Wir freuen uns sie am <%=tournament.date%> in <%=tournament.location%> willkommen zu heissen.<br>
+    <br>
+    Bei Fragen zur Anmeldung erreichen Sie uns unter unserer e-mail Adresse: <%=tournament.email%><br>
+    <br>
+    Die Turnierleitung<br>
