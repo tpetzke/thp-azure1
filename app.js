@@ -9,6 +9,8 @@ var session = require('client-sessions');
 //DB Id
 const dbId = "thpapp1";
 const collectionId = "players";
+const dewisCollectionId = "dewis";
+
 
 // Connection strings
 const endpoint = "https://players.documents.azure.com:443/";
@@ -17,6 +19,7 @@ const authKey = "0RRyr4FxX7h9qj5AQsRFv0JQByOdfDF4ddrb52S5xETCq7AV3JqDgns4c560E7i
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var playerRouter = require('./routes/player');
 
 var app = express();
 
@@ -51,9 +54,11 @@ app.use(async function (req, res, next) {
   //const db = await cosmosClient.databases.createIfNotExists({id: dbId});
   const db = cosmosClient.database(dbId);
   const container = db.container(collectionId);
-
   req.container = container;
-  req.dewisdb = 0;
+
+  const dewis = db.container(dewisCollectionId);
+  req.dewis = dewis;
+
   res.locals.userid = req.session.userid;
   res.locals.level = req.session.level;
   next();
@@ -62,6 +67,7 @@ app.use(async function (req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/player',playerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

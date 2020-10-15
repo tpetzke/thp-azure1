@@ -31,6 +31,45 @@ router.get('/', async function(req, res, next) {
 
 });
 
+/* GET Imprint page */
+router.get('/imprint', async function(req, res, next) {
+  
+  // Open reference to DB collection <players>
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+  res.render('imprint', { tournament: tournaments[0].tournament });
+});
+
+/*GET Login Page
+  Read the Tournament data to presented on the homepage from the database */
+router.get('/login', async function(req, res, next) {
+
+  // Open reference to DB collection <players>
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+  
+  res.render('login', { tournament: tournaments[0].tournament, message : "Authentifizierung notwendig"});
+});
+
+/*GET Logout
+  Destroy the session and forward to index */
+router.get('/logout', function(req, res, next) {
+  req.session.destroy();
+  res.redirect('/');  
+});
+
 /* GET clublist page.
 Read the Tournament data and the Club List from the View to assemble an overview page of clubs */
 router.get('/clublist', async function(req, res, next) {
@@ -48,8 +87,84 @@ router.get('/clublist', async function(req, res, next) {
     query: "SELECT count(1) as val, c.Club as key FROM c where c.Club > '' group by c.Club"
   };
   const { resources: clubs } = await container.items.query(querySpec).fetchAll();
-  console.log(clubs);
+  
   res.render('clublist', { tournament: tournaments[0].tournament, clubs:clubs });
 });
+
+/* GET club page.
+   Read the Tournament data and the player list per club to assemble a club view
+   in the http req the field "club" points to the name of the requested club */
+router.get('/club', async function(req, res, next) {
+
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+
+  var club_name = req.query.club;
+  
+  querySpec = {
+    query: "SELECT * FROM c where c.Club = @club",
+    parameters: [
+      {
+        name: "@club",
+        value: club_name
+      }
+    ]
+  };
+
+  const { resources: players } = await container.items.query(querySpec).fetchAll();
+
+  players.sort(function(a, b) { if(a.Firstname+a.Lastname > b.Firstname+b.Lastname) return 1; else return -1}); 
+ 
+  res.render('club', { ClubName: club_name, tournament: tournaments[0].tournament, data: players });
+});
+
+/* GET group page.
+   Read the Tournament data and the Group List to assemble a Group view
+   in the http req the field "idx" points to the index of the requested group in the group array */
+router.get('/group', async function(req, res, next) {
+
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+  
+  var idx = parseInt(req.query.idx, 0);
+  var group_name = "";
+
+  if (idx <0 || idx >= tournaments[0].tournament.groups.length) idx = 0;
+  group_name = tournaments[0].tournament.groups[idx];
+
+  // special query syntax required as Group is a reserved word
+  querySpec = {
+    query: "SELECT * FROM c where c[\"Group\"] = @group",
+    parameters: [
+      {
+        name: "@group",
+        value: group_name
+      }
+    ]
+  };
+  console.log(querySpec);
+  const { resources: players } = await container.items.query(querySpec).fetchAll();
+
+  players.sort(function(a, b) { 
+    var twz_a = 0, twz_b = 0; 
+    if (a.hasOwnProperty("DWZ")) twz_a = a.DWZ; 
+    if (b.hasOwnProperty("DWZ")) twz_b = b.DWZ; 
+    if (a.hasOwnProperty("ELO") && a.ELO>twz_a) twz_a = a.ELO; 
+    if (b.hasOwnProperty("ELO") && b.ELO>twz_b) twz_b = b.ELO; 
+    return twz_b - twz_a; 
+  });
+  res.render('group', { GroupName: group_name, tournament: tournaments[0].tournament, data: players });
+});
+
 
 module.exports = router;

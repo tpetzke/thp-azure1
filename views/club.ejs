@@ -19,24 +19,24 @@
               <th style="text-align:center">Geburtsjahr</th>
               <% if (tournament.paymentdeadline != "0") { %><th style="text-align:center">Startgeld</th> <% } %>
             </tr>
-            <% for (i=0; i < data.docs.length; i++) { 
+            <% for (i=0; i < data.length; i++) { 
               var a = "";
-              if (data.docs[i].Sex == "female") a = "w";
+              if (data[i].Sex == "female") a = "w";
               var ss = "confirmed";
-              if (data.docs[i].status) ss = data.docs[i].status;
+              if (data[i].status) ss = data[i].status;
               var ps = "bezahlt";
-              if (data.docs[i].paymentstatus == "open") ps = "offen";
-              if (data.docs[i].paymentstatus == "free") ps = "frei";
-              if (data.docs[i].status == "waitlisted") ps = "";
+              if (data[i].paymentstatus == "open") ps = "offen";
+              if (data[i].paymentstatus == "free") ps = "frei";
+              if (data[i].status == "waitlisted") ps = "";
               %>
             <tr class="<%=ss%>">
               <td style="text-align:center"><%= i+1 %></td>
-              <td><%= (data.docs[i].Title !== ""?data.docs[i].Title+" ":"") + data.docs[i].Firstname + " " + data.docs[i].Lastname %></td>
+              <td><%= (data[i].Title !== ""?data[i].Title+" ":"") + data[i].Firstname + " " + data[i].Lastname %></td>
               <td style="text-align:center"><%= a %></td>
-              <td><%= data.docs[i].Club %></td>
-              <td style="text-align:center"><%= data.docs[i].ELO %></td>
-              <td style="text-align:center"><%= data.docs[i].DWZ %></td>
-              <td style="text-align:center"><%= data.docs[i].YOB %></td>
+              <td><%= data[i].Club %></td>
+              <td style="text-align:center"><%= data[i].ELO %></td>
+              <td style="text-align:center"><%= data[i].DWZ %></td>
+              <td style="text-align:center"><%= data[i].YOB %></td>
               <% if (tournament.paymentdeadline != "0") { %><td style="text-align:center"><%=ps%></td> <% } %>
             </tr>
             <% } %>  
