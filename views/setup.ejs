@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Turnier Setup</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+      <div  id="container">
+        <img src="/images/chess-banner.jpg" alt="" width="940" height="243">
+        <h1>Turnier Setup</h1>
+        <form class="setupform" id="formTournamentSetup" name="setup" method="post" action="/admin/setup">
+            <div style="float:left;margin-right:20px;">
+            <label for="name">Turniername</label>
+            <input id="name" class="input" type="text" placeholder="Turniername" name="name" value="<%= tournament.name %>"/>
+            </div>
+            <div style="float:left;margin-right:20px">
+                <label for="date">Kurzname</label>
+                <input id="shortname" class="input short" type="text" placeholder="Kurzname" name="shortname" value="<%=tournament.shortname%>"/>
+            </div>
+            <div style="float:left">
+                <label for="date">Datum</label>
+                <input id="date" class="input short" type="text" placeholder="Datum" name="date" value="<%= tournament.date %>"/>
+            </div>
+            <div style="float:left;margin-right:20px;">
+            <label for="email">Turnier E-Mail Adresse</label>
+            <input id="email" class="input" type="email" placeholder="Turnier E-Mail Adresse" name="email" value="<%=tournament.email%>" required/>
+            </div>
+            <div style="float:left;margin-right:20px;">
+              <input type="checkbox" name="sentmails" id="sentmails" value="sentmails" <%=tournament.sentmails=="true"?" checked ":""%> style="float:left;margin-left:20px;margin-top:20px;">
+              <label for="sentmails" class="chkbox" style="float:left;margin:18px 0px 0px 0px;font-size:12px;">Bestätigungs E-Mail versenden</label>
+            </div>  
+            <br style="clear:both">
+            <div style="float:left; margin-right:20px;">
+                <label for="location">Ort</label>
+                <input id="location" class="input" type="text" placeholder="Ort" name="location" value="<%= tournament.location %>"/>
+            </div>    
+            <div style="float:left;">
+                <label for="capacity">Kapazität, 0 = &infin;</label>
+                <input id="capacity" class="input" type="number" placeholder="100" name="capacity" value="<%= tournament.capacity %>"/>  
+            </div>
+            <div style="float:left;">
+                <label for="entryfee">Startgebühr in €</label>
+                <input id="entryfee" class="input" type="number" placeholder="0" name="entryfee" value="<%= tournament.entryfee %>"/>  
+            </div>
+            <div style="float:left;">
+                <label for="paymentdeadline">Zahlungsziel</label>
+                <select id="selectPaymentdeadline" name="paymentdeadline" style="width: 120px;" required>
+                  <option value="0" <%=tournament.paymentdeadline=="0"?"selected":""%>>Bar vor Ort</option>
+                  <option value="7" <%=tournament.paymentdeadline=="7"?"selected":""%>>7 Tage</option>
+                  <option value="14" <%=tournament.paymentdeadline=="14"?"selected":""%>>14 Tage</option>
+                </select>
+            </div>
+            <br style="clear:both">
+            <div style="float:left;margin-right:20px;">
+            <label for="name">Bankverbindung Empfänger</label>
+            <input id="recipient" class="input" type="text" placeholder="Empfänger" name="recipient" value="<%= tournament.recipient %>"/>
+            </div>
+            <div style="float:left">
+                <label for="IBAN">IBAN</label>
+                <input id="IBAN" class="input" type="text" placeholder="IBAN" name="IBAN" value="<%= tournament.IBAN %>"/>
+            </div>
+            <br style="clear:both">
+            <label for="description">Beschreibung</label>
+            <input id="description" class="input long" type="text" placeholder="Beschreibung" name="description" value="<%= tournament.description %>"/>
+            <label for="announcement">Link zur Ausschreibung</label>
+            <input id="announcement" class="input long" type="text" placeholder="Ausschreibung" name="announcement" value="<%= tournament.url %>"/>
+            <%
+            var groups = "";
+            for (i=0; i< tournament.groups.length-1; i++) { 
+                groups += tournament.groups[i] + ", ";
+            }
+            if (i < tournament.groups.length) groups += tournament.groups[i];
+            %>
+            <label for="groups">Turniergruppen</label>
+            <input id="groups" class="input long" type="text" placeholder="Turniergruppen (mit , getrennt)" name="groups" value="<%= groups %>"/>
+            <label for="imprint">Impressum Informationen (mit , getrennt)</label>
+            <input id="imprint" class="input long" type="text" placeholder="Impressum" name="imprint" value="<%=tournament.imprint%>"/>
+
+            <input type="hidden" id="_id" name="_id" value="<%=_id%>">
+            <input type="hidden" id="_rev" name="_rev" value="<%=_rev%>"> 
+            <p>Warnung! Bei der Neuanlage eines Turniers werden alle Spieler-Meldungen gelöscht und ein neues Turnier Schema erzeugt. 
+            Die User-Ids fürs Portal bleiben erhalten. <b>Turnier Setup aktualsieren</b> behält die Spielerdaten bei.</p>
+            <button id="btnSubmit" name="submit" class="blue-button" value="update">Turnier Setup aktualisieren</button>
+            <button id="btnSubmit" name="submit" class="red-button" value="init">Neues Turnier anlegen</button>
+            <button id="btnSubmit" name="submit" class="blue-button" value="back">Zurück zum Dashboard</button>
+        </form>   
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

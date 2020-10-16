@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webmaster Verwaltung</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script> 
+      // Function to check Whether both passwords match 
+      function checkPassword(form) { 
+          if (form.password1.value != form.password2.value) { 
+            alert ("\nPasswörter stimmen nicht überein"); 
+            return false; 
+          } 
+          return true;
+      } 
+  </script> 
+  </head>
+  <body>
+      <div id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h1><%=title%></h1>
+        <h3>Vergeben Sie eine User Id, Zugangstufe und Passwort.</h3> 
+        <p>Die Zugangstufe <b>Turnierleiter</b> gibt Zugriff auf die Meldelisten und Spielerdaten. 
+           Die Zugangstufe <b>Adminstrator</b> berechtigt <u>zusätzlich</u> zum Anlegen neuer User bzw. deren Löschung. <%=level%>
+        </p>
+        <form id="formWebMasterMgmt" name="webmastermgmt" method="post" onSubmit = "return checkPassword(this)" action="/admin/webmaster">
+            <input id="id" type="hidden" name="id" value="<%=id%>">
+            <div style="float:left;margin-right:20px;">
+                <label for="inputUserid">User ID (e-mail Adresse)</label>
+                <input id="inputUserid" class="input" type="text" placeholder="User Id (e-mail Adresse)" name="userid" value="<%=userid%>" required/>
+            </div>
+            <div style="float:left;">
+                <label for="selectLevel">Zugangstufe</label>
+                <select id="selectLevel" name="level" required>
+                    <option value="root" <% if (level=="root") { %>selected <% } %>>Administrator</option>
+                    <option value="user" <% if (level=="user") { %>selected <% } %>>Turnierleiter</option>
+                </select>
+            </div>    
+            <br style="clear:both">
+            <div style="float:left;margin-right:20px;">
+                <label for="inputPassword_1">Passwort</label>
+                <input id="inputPassword_1" class="input" type="password" placeholder="Passwort" name="password1" required/>
+            </div>
+            <div style="float:left;">
+              <label for="inputPassword_2">Passwort (Wiederholung)</label>
+              <input id="inputPassword_2" class="input" type="password" placeholder="Passwort" name="password2" required/>
+            </div>  
+            <br style="clear:both">
+            <button id="btnSubmit" name="submitted" class="blue-button" value="save">Speichern</button>
+        </form>
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>

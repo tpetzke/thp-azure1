@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anmeldung ändern</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+      <div  id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h1>Anmelde-Daten ändern</h1>
+        <form id="formModUser" name="moduser" method="post" action="/edit4p">
+            <input id="id" name="id" type="hidden" value="<%=player.id%>">
+            <input id="key" name="key" type="hidden" value="<%=key%>">
+            <div style="float:left;">
+            <label for="inputTitle">FIDE Titel</label>
+            <input style="width:75px" id="inputTitle" class="input" type="text" placeholder="Titel" name="title" value="<%=player.Titel%>" />
+            </div>
+            <div style="float:left;margin-right:20px;">
+            <label for="inputFirstname">Vorname</label>
+            <input style="width:195px" id="inputFirstname" class="input" type="text" placeholder="Vorname" name="firstname" value="<%= player.Firstname %>" />
+            </div>
+            <div style="float:left;">
+              <label for="inputLastname">Nachname</label>
+              <input id="inputLastname" class="input" type="text" placeholder="Nachname" name="lastname" value="<%= player.Lastname %>"/>
+            </div>  
+            <br style="clear:both">
+            
+            <div style="float:left;">
+            <label for="inputDWZ">DWZ</label>
+            <input id="inputDWZ" class="input" type="number" placeholder="DWZ" name="dwz" value="<%=player.DWZ%>"/>
+            </div>
+            <div style="float:left;">
+            <label for="inputELO">ELO</label>
+            <input id="inputELO" class="input" type="number" placeholder="ELO" name="elo" value="<%=player.ELO%>"/>
+            </div>
+            <div style="float:left;">
+            <label for="inputYOB">Geburtsjahr (4-stellig)</label>
+            <input id="inputYOB" class="input" type="number" placeholder="2000" name="yob" min="1900" value="<%=player.YOB%>" required/>
+            </div>
+            <div style="float:left;margin-left:34px;">
+            <label for="inputCountry">Land</label>
+            <input style="width:75px;" id="inputCountry" class="input" type="text" name="country" value="<%=player.Country%>"/>
+            </div>
+            <br style="clear:both;" />
+            
+            <% 
+               var groupsel = [];
+               for (i=0; i<tournament.groups.length; i++) if (tournament.groups[i] == player.Group) groupsel.push("selected"); else groupsel.push(""); 
+            %>
+            <div style="float:left;margin-right:20px;">
+            <label for="selectGroup">Turniergruppe</label>
+            <select id="selectGroup" name="group" required>
+            <% for(i = 0; i < tournament.groups.length; i++) { %> 
+                    <option value="<%= tournament.groups[i] %>" <%=(tournament.groups[i] == player.Group) ? " selected" : ""%>><%= tournament.groups[i] %></option>
+            <% } %>
+            </select>
+            </div>
+            <div style="float:left">
+            <label for="selectSex">Geschlecht</label>
+              <select id="selectSex" name="sex">
+                    <option value="male" <%=(player.Sex == "male")?"selected":""%>>Männlich</option>
+                    <option value="female" <%=(player.Sex == "female")?"selected":""%>>Weiblich</option>
+            </select>
+            </div>
+            <br style="clear:both">
+            <div style="float:left;margin-right:20px;">
+            <label for="inputVerein">Verein</label>
+            <input id="inputVerein" class="input" type="text" placeholder="Verein" name="club" value="<%=player.Club%>" />
+            </div>
+            <div style="float:left">
+              <label for="inputEmail">Email</label>
+              <input id="inputEmail" class="input" type="text" placeholder="Email" name="email" value="<%=player.email%>" required/>
+            </div>
+            <br style="clear:both">
+            <br style="clear:both">
+            <button id="btnSubmit" name="submitted" class="blue-button" value="save">Speichern</button>
+            <button id="btnSubmit" name="submitted" class="blue-button" value="back">Abbrechen</button>
+            <% if (tournament.paymentdeadline == "0") { %>
+            <button id="btnSubmit" name="submitted" class="red-button" value="delete">Anmeldung löschen</button>
+            <% } %>
+        </form>
+        
+
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>

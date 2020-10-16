@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Benutzerliste</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/sorttable.js"></script>
+  </head>
+  <body>
+      <div  id="container">
+        <%- include partials/main-mnu.ejs %>
+        <h1>Administration Portal Benutzer %></h1>
+        <h3><%=message%></h3>
+        <div style="width:55%">
+            <table class="sortable">
+                <thead>
+                    <th style="text-align:center">Nr.</th>
+                    <th>User Id</th>
+                    <th>Level</th>
+                    <th>Zugriff auf</th>
+                    <th>Aktion</th>
+                </thead>
+                <% for (i=0; i<users.length; i++) { %>
+                    <tr>
+                    <td style="text-align:center"><%=i+1%></td>
+                    <td><% if (level=="root" && userid !==users[i].userid) { %><a href="/admin/webmaster/id/<%=users[i].id%>/edit"><% } %><%=users[i].userid%></a></td>
+                    <td style="text-align:center"><%=(users[i].level=="root")?"Administrator":"Turnierleiter"%></td> 
+                    <td style="text-align:center"><%=(users[i].level=="root")?"Alles":"Meldelisten"%></td> 
+                    <td style="text-align:center"><% if (level=="root" && userid !==users[i].userid) { %><a href="/admin/webmaster/id/<%=users[i].id%>/delete" title="Nutzer <%=users[i].userid%> löschen"><img src="/images/delete.png" alt="Löschen" width="20" height="20"></a><% } %></td> 
+                    </tr>  
+                <% } %>     
+            </table>
+        </div>
+        <br>
+        <div id="index_button_container">
+        <form method="GET" action="/admin/webmaster/id/0/new">
+          <input type="<%=(level=="root")?"submit":"hidden"%>" class="blue-button" value="Neuen Nutzer anlegen" />
+          <a href='/admin/dashboard' class="blue-button">Zurück zum Dashboard</a>
+        </form>
+        </div>
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anmeldung überprüfen</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+
+    <% var geschlecht = "Männlich"; if (player.Sex=="female") geschlecht="Weiblich"; %>
+
+    <div  id="container">
+        <img src="/images/chess-banner-thin.jpg" alt="" width="940" height="140">
+        <br>
+        <h1><%=message%></h1>
+        <div style="float:left; width:350px; margin-right:20px;">
+            <h2>Anmelde-Details</h2>
+            <table id="players" style="width:100%">
+                <tr>
+                <td>FIDE Titel</td>
+                <td><%=player.Title%></td>
+                </tr>
+                <tr>
+                <td>Vorname</td>
+                <td><%=player.Firstname%></td>
+                </tr>
+                <tr>
+                <td>Nachname</td>
+                <td><%=player.Lastname%></td>
+                </tr>
+                <tr>
+                <td>Geburtsjahr</td>
+                <td><%=player.YOB%></td>
+                </tr>
+                <tr>
+                <td>Geschlecht</td>
+                <td><%=geschlecht%></td>
+                </tr>
+                <tr>
+                <td>Email</td>
+                <td><%=player.email%></td>
+                </tr>
+                <tr>
+                <td>Verein</td>
+                <td><%=player.Club%></td>
+                </tr>
+                <tr>
+                <td>DWZ</td>
+                <td><%=player.DWZ%></td>
+                </tr>
+                <tr>
+                <td>ELO</td>
+                <td><%=player.ELO%></td>
+                </tr>
+                <tr>
+                  <td>Land</td>
+                  <td><%=player.Country%></td>
+                </tr>
+                <tr>
+                    <td>Turniergruppe</td>
+                    <td><%=player.Group%></td>
+                </tr>
+            </table>
+        </div>
+        <br style="clear:both">
+        <div style="height:70px;">
+        <br>
+        <a href='/' class="blue-button">Zurück zur Homepage</a>
+        <br>
+        </div>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>

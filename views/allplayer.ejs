@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spieler Administration</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/sorttable.js"></script>
+  </head>
+  <body>
+      <div  id="container">
+        <%- include partials/main-mnu.ejs %>
+        <table class="sortable">
+        <thead>
+           <th style="text-align:center">Nr.</th>
+           <th>Spieler</th>
+           <th style="text-align:center">A</th>
+           <th style="text-align:center">ELO</th>
+           <th style="text-align:center">DWZ</th>
+           <th>Verein</th>
+           <th style="text-align:center">Gruppe</th>
+           <th style="text-align:center">Status</th>
+           <th>Anmeldung</th>
+           <th>email</th>
+        </thead>
+        <% for(i=0; i < players.length; i++) { 
+          var a = ""; if (players[i].Sex=="female") a="w";   
+          var tm = new Date();
+          tm.setTime(players[i].datetime);
+          var ts = tm.toString().slice(4,15); 
+          var paymentStatusTitle = "Bezahlt";
+          if (players[i].paymentstatus == "open") paymentStatusTitle = "Offen";
+          if (players[i].paymentstatus == "free") paymentStatusTitle = "Frei";
+          if (players[i].paymentstatus == "overdue") paymentStatusTitle = "Überfällig";
+        %>
+        <tr>
+           <td style="text-align:center"><%=i+1%></td>
+           <td><a href="/admin/player/id/<%=players[i].id%>"><%=(players[i].Title!==""?players[i].Title+" ":"")+players[i].Firstname + " " + players[i].Lastname %></a></td>
+           <td style="text-align:center"><%=a%></td>
+           <td style="text-align:center"><%=players[i].ELO %></td>
+           <td style="text-align:center"><%=players[i].DWZ %></td>
+           <td><%=players[i].Club %></td>
+           <td style="text-align:center"><%=players[i].Group %></td>
+           <td style="text-align:center"><img src="/images/<%=players[i].status%>-icon.png" alt="st" width="16" height="16">
+                                         <% if (players[i].status == "confirmed") { %>
+                                         <img src="/images/<%=players[i].paymentstatus%>20.png" title="<%=paymentStatusTitle%>" alt="ps" width="20" height="20">
+                                         <% } %>
+          </td>
+           <td><%=ts%></td>
+           <td><%=players[i].email %></td>
+        </tr> 
+        <% } %>   
+        </table>
+        <div id="index_button_container">
+        <form class="buttonform" id="formButton" name="button" method="post" action="/admin/refreshplayerlist">
+            <input id="capacity" class="input" type="hidden"  name="capacity" value="<%= tournament.capacity %>"/>
+            <a href='/admin/dashboard' class="blue-button">Zurück zum Dashboard</a>
+            <button id="btnSubmit" name="submit" class="orange-button" value="refresh">Spielerliste aktualisieren</button>
+        </form>   
+        </div>
+        <%- include partials/footer.ejs %>
+      </div>
+  </body>
+</html>
