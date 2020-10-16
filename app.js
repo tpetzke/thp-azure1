@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('client-sessions');
 
+// read the .env file and make the value of VARIABLE available via process.env.VARIABLE
+require('dotenv').config(); 
+
 // CONFIG ITEMS START
 //DB Id
 const dbId = "thpapp1";
@@ -20,6 +23,7 @@ const authKey = "0RRyr4FxX7h9qj5AQsRFv0JQByOdfDF4ddrb52S5xETCq7AV3JqDgns4c560E7i
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var playerRouter = require('./routes/player');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
@@ -68,6 +72,7 @@ app.use(async function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/player',playerRouter);
+app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

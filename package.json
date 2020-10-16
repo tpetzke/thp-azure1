@@ -7,12 +7,16 @@
   },
   "dependencies": {
     "@azure/cosmos": "^3.9.2",
+    "bcryptjs": "^2.4.3",
     "client-sessions": "^0.8.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "json2csv": "^5.0.3",
+    "morgan": "~1.9.1",
+    "nodemailer": "^6.4.14"
   }
 }

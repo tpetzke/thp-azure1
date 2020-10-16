@@ -1,4 +1,6 @@
 var express = require('express');
+const Email = require('../classes/email');
+
 var router = express.Router();
 
 /* GET home page. */
@@ -61,6 +63,53 @@ router.get('/login', async function(req, res, next) {
   const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
   
   res.render('login', { tournament: tournaments[0].tournament, message : "Authentifizierung notwendig"});
+});
+
+/* POST Login
+  Verify User ID and Password and forward to the admin dash board */
+router.post('/login', async function(req, res, next) {
+
+  bcrypt = require("bcryptjs");
+
+  // Open reference to DB collection <players>
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+  
+  var userid = req.body.userid.trim();
+  var password = req.body.password.trim();
+
+  querySpec = {
+    query: "SELECT * FROM c where c.userid = @userid",
+    parameters: [ { name: "@userid", value: userid } ]
+  };
+
+  const { resources: users } = await container.items.query(querySpec).fetchAll();
+    
+  if (users.length) {
+
+    bcrypt.compare(password, users[0].password, function(err, success) {
+      if (success) {   // Successful Login
+        // sets a cookie with the user's info
+        req.session.userid = userid;
+        res.locals.userid = userid;
+        req.session.level = users[0].level;
+        res.locals.level = users[0].level;
+        console.log("User: "+userid+" successfully authenticated");
+
+        res.redirect("/admin/dashboard");
+      } else {
+          res.render('login', { tournament: tournaments[0].tournament, message: "Ungültige User Id oder Passwort" });
+      };    
+    });   
+  } else {
+      res.render('login', { tournament: tournaments[0].tournament, message: "Ungültige User Id oder Passwort" });
+  }
 });
 
 /*GET Logout
@@ -166,5 +215,100 @@ router.get('/group', async function(req, res, next) {
   res.render('group', { GroupName: group_name, tournament: tournaments[0].tournament, data: players });
 });
 
+/* GET player maintenance page to allow a player to modify its own details. The player id is given in the request as id together with a secret key.
+   The secret key is calculated from later numbers of the datetime property (seconds and milliseconds) 
+  Read the Tournament data and player from the DB to prefill the player input fields */
+router.get('/edit4p/id/:id/:key', async function(req, res, next) {
+
+  // Get the tournament reference
+  const container =  req.container;
+
+  var querySpec;
+  querySpec = {
+    query: "SELECT * FROM c where c.tournament.name > ' '"
+  };
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+
+  var id = req.params.id;
+  var key = req.params.key;
+
+  querySpec = {
+    query: "SELECT * FROM c WHERE c.id = @id",
+    parameters: [{ "name": "@id", "value": id}]
+  };
+  const { resources: players } = await container.items.query(querySpec).fetchAll();
+
+  var secret;
+  if (players.length && key == (secret = Email.getSecret(players[0].datetime))) {
+
+        res.render('modplayer4p', { tournament: tournaments[0].tournament, player: players[0], key: secret }); 
+  } else res.redirect("/");
+});
+    
+/* POST player maintenance page to allow a player to modify its own details. 
+   The secret key is calculated from later numbers of the datetime property (seconds and milliseconds) 
+   Read the Tournament data and player from the DB to prefill the player input fields */
+router.post('/edit4p', async function(req, res, next) {
+
+  // Get the tournament reference
+  const container =  req.container;
+
+  if (req.body.submitted == "save")
+  {
+    // Get our form values. These rely on the "name" attributes
+    var firstname = req.body.firstname.trim();
+    var lastname = req.body.lastname.trim();
+    var title = req.body.title.trim();
+    var dwz = req.body.dwz;
+    var elo = req.body.elo;
+    var email = req.body.email;
+    var group = req.body.group;
+    var sex = req.body.sex;
+    var club = req.body.club.trim();
+    var yob = req.body.yob;
+    var country = req.body.country.trim().toUpperCase();
+    var id = req.body.id;
+    var key = req.body.key;
+
+    // lookup the player in the database
+    var querySpec = {
+      query: "SELECT * FROM c WHERE c.id = @id",
+      parameters: [{ "name": "@id", "value": id}]
+    };
+    const { resources: players } = await container.items.query(querySpec).fetchAll();
+    
+    if (players.length && key == Email.getSecret(players[0].datetime)) {
+      var player = players[0];
+
+      // Update player in the database    
+      var updateplayer = { id: id, _rid: player._rid, Title: title, Firstname: firstname, Lastname: lastname, DWZ: dwz, ELO: elo, YOB: yob, Country: country, Group: group, Sex: sex, Club: club, email: email, datetime: player.datetime, status: player.status, paymentstatus: player.paymentstatus, dewis: player.dewisid };
+      const { resource : updated } = container.item(id).replace(updateplayer);
+            
+      // And forward to success page
+      res.render("confirmupdate", { player: updateplayer, message: "Die Anmeldung wurde aktualisiert" });
+    } else res.redirect("/"); 
+    
+  } else if (req.body.submitted == "delete") {
+
+    var id = req.body.id;
+    var key = req.body.key;
+    
+    // lookup the player in the database
+    var querySpec = {
+      query: "SELECT * FROM c WHERE c.id = @id",
+      parameters: [{ "name": "@id", "value": id}]
+    };
+    const { resources: players } = await container.items.query(querySpec).fetchAll();
+
+    if (players.length && key == Email.getSecret(players[0].datetime)) {
+
+      var player = players[0];
+      console.log("Deleting player: "+ player.Lastname +" id: "+id);
+
+      const { resource : result } = await container.item(id, id).delete();
+      res.render("confirmupdate", { player: player, message: "Die Anmeldung wurde gelöscht" });
+    } else res.redirect("/");
+  } else res.redirect("/"); 
+});
 
 module.exports = router;
