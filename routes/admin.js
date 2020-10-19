@@ -124,59 +124,17 @@ router.post('/setup', async function (req, res) {
   if (action=="init")  // TODO:fixme
   {
     var dbname = db.config.db;
-    console.log("Init Request received for database: " + dbname);
+    console.log("Init Request received for database: " + dbname+" Deleting all players");
+  
+    querySpec = {
+      query: "SELECT * FROM c where c.Lastname > ' '"
+    };
+    const { resources: players } = await container.items.query(querySpec).fetchAll();
 
-    // collect the user list as we will transfer it into the new database
-    var query = {"selector": { "userid": {"$gt": ""} } };
-    db.find(query, function(err, users) {
-      if (err) console.log(err);
-
-      var docs = [];
-      for (i=0; i<users.docs.length; i++) docs.push({userid:users.docs[i].userid, password:users.docs[i].password,level:users.docs[i].level});
-      
-      tournament_doc = {
-        tournament: {
-        name: name,
-        shortname: shortname,
-        email: email,
-        sentmails: sentmails,
-        location: location,
-        date: date,
-        url: announcement,
-        description : description,
-        capacity : capacity,
-        groups: groups,
-        entryfee: entryfee,
-        paymentdeadline: paymentdeadline,
-        recipient: recipient,
-        IBAN: IBAN,
-        imprint : imprint
-      }} 
-
-      docs.push(tournament_doc);
-
-      cloudant.db.destroy(dbname, function (err, data) {
-        console.log("Delete database "+dbname+" status: "+data);
-        console.log(err);
-
-        cloudant.db.create(dbname, function (err, data) {
-          if (!err) { //err if database doesn't already exists
-              console.log("Created database: " + dbname);
-              
-              var dbutils = require('./dbutils');
-              db = cloudant.db.use(dbname);
-              req.db = db;
-              dbutils.dbInit(db, docs, function() {
-                db.bulk({ docs:docs }, function(err) { 
-                  if (err) { throw err; }
-                  console.log("all inserted. Forwarding ...")
-                  res.redirect("/admin/dashboard");
-                });
-              });
-          } else res.redirect("/admin/dashboard");
-        });
-      });
-    });
+    for (i=0; i< players.length; i++) {
+      const { resource : result } = await container.item(players[i].id, players[i].id).delete();
+    }
+    res.redirect("/admin/dashboard");
   }
 });
 
