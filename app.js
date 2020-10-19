@@ -19,6 +19,7 @@ const dewisCollectionId = "dewis";
 const endpoint = process.env.AccountEndpoint || process.env.CUSTOMCONNSTR_AccountEndpoint;
 const authKey = process.env.AccountKey || process.env.CUSTOMCONNSTR_AccountEndpoint;
 // CONFIG ITEMS END
+console.log(process.env);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
