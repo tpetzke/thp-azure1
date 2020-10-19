@@ -12,6 +12,7 @@ module.exports = internal.Email = class {
       
             const EMAIL_USER = process.env.EMAIL_USER || process.env.APPSETTING_EMAIL_USER;   
             const EMAIL_PW = process.env.EMAIL_PW || process.env.APPSETTING_EMAIL_PW;   
+            console.log(EMAIL_USER+":"+EMAIL_PW);
 
             if (typeof EMAIL_USER !== 'undefined' && EMAIL_USER !== null && 
                 typeof EMAIL_PW !== 'undefined' && EMAIL_PW !== null) {
@@ -20,8 +21,8 @@ module.exports = internal.Email = class {
               var transporter = nodemailer.createTransport({
                 service: 'SendinBlue',
                 auth: {
-                  user: process.env.EMAIL_USER,
-                  pass: process.env.EMAIL_PW
+                  user: EMAIL_USER,
+                  pass: EMAIL_PW
               }
               });
       
