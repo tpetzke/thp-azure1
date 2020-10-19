@@ -16,8 +16,8 @@ const dewisCollectionId = "dewis";
 
 
 // Connection strings
-const endpoint = "https://players.documents.azure.com:443/";
-const authKey = "0RRyr4FxX7h9qj5AQsRFv0JQByOdfDF4ddrb52S5xETCq7AV3JqDgns4c560E7ih2CAhZZf8lCJ9QvplTuTJGg==";
+const endpoint = process.env.AccountEndpoint || process.env.CUSTOMCONNSTR_AccountEndpoint;
+const authKey = process.env.AccountKey || process.env.CUSTOMCONNSTR_AccountEndpoint;
 // CONFIG ITEMS END
 
 var indexRouter = require('./routes/index');
