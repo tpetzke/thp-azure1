@@ -4,14 +4,17 @@ module.exports = internal.Email = class {
 
     static sendConfirmation(tournament, player, playercnt, links) {
         var ejs = require("ejs");
-      
+              
         ejs.renderFile("views/templates/mail.ejs", { tournament: tournament, player: player, playercnt : playercnt, links: links }, function (err, data) {
           if (err) {
               console.log(err);
           } else {
       
-            if (typeof process.env.EMAIL_USER !== 'undefined' && process.env.EMAIL_USER !== null && 
-                typeof process.env.EMAIL_PW !== 'undefined' && process.env.EMAIL_PW !== null) {
+            const EMAIL_USER = process.env.EMAIL_USER || process.env.APPSETTING_EMAIL_USER;   
+            const EMAIL_PW = process.env.EMAIL_PW || process.env.APPSETTING_EMAIL_PW;   
+
+            if (typeof EMAIL_USER !== 'undefined' && EMAIL_USER !== null && 
+                typeof EMAIL_PW !== 'undefined' && EMAIL_PW !== null) {
       
               var nodemailer = require('nodemailer');
               var transporter = nodemailer.createTransport({
