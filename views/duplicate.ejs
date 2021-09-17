@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Turnieranmeldung</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div  id="container">
+        <img src="/images/chess-banner.jpg" alt="" width="940" height="243">
+        <h1>Hinweis zur Anmeldung</h1>
+        <h2>Ein Spieler mit diesem Namen ist bereits für das Turnier gemeldet</h2>
+        <h4>Um eine Doppelanmeldung zu vermeiden prüfen sie bitte die bereits vorhandenen Meldedaten!</h4>        
+        <table id="players" style="width:50%">
+            <tr><td>FIDE Titel</td><td><%=player.Title%></td></tr>
+            <tr><td>Vorname</td><td><%=player.Firstname%></td></tr>
+            <tr><td>Nachname</td><td><%=player.Lastname%></td></tr>
+            <tr><td>Geburtsjahr</td><td><%=player.YOB%></td></tr>
+            <tr><td>Geschlecht</td><td><%=player.Sex=="male"?"Männlich":"Weiblich"%></td></tr>
+            <tr><td>Verein</td><td><%=player.Club%></td></tr>
+            <tr><td>DWZ</td><td><%=player.DWZ%></td></tr>
+            <tr><td>ELO</td><td><%=player.ELO%></td></tr>
+            <tr><td>Turniergruppe</td><td><%=player.Group%></td></tr>
+            <tr><td>Meldezeitpunkt</td><% var tm = Date(player.datetime); var ts = tm.toString().slice(4,15); %><td><%=ts%></td></tr>
+        </table>
+        <form id="formAddUser" name="adduser" method="post" action="/player/lookup_player">
+            <input id="inputFirstname" class="input" type="hidden" name="firstname" value="<%=player.Firstname%>"/>
+            <input id="inputLastname" class="input" type="hidden" name="lastname" value="<%=player.Lastname%>"/>
+            <input id="inputDuplicateCheck" class="input" type="hidden" name="duplicatecheck" value="false"/>
+            <button id="btnSubmit" class="blue-button">Trotzdem mit Anmeldung fortfahren</button>
+            <a href='/' class="red-button">Anmeldung abbrechen</a>
+        </form>
+        <%- include partials/footer.ejs %>
+    </div>
+  </body>
+</html>
