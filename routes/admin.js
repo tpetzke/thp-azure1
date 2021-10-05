@@ -569,12 +569,15 @@ router.get('/download/group/:name', requireLogin, async function(req, res, next)
     p = players[i];
     var cntry = typeof p.Country == "undefined" ? "GER" : p.Country;
     var attr = p.Sex == "female" ? "w" : "";
+    var dwz = p.DWZ != 0 ? p.DWZ : "";
+    var elo = p.ELO != 0 ? p.ELO : "";
+    
 
     var swiss_player = {  "Name": p.Lastname + ', ' + p.Firstname,
                           "Verein": p.Club,
                           "Land": cntry,
-                          "ELO": p.ELO,
-                          "DWZ" : p.DWZ,
+                          "ELO": elo,
+                          "DWZ" : dwz,
                           "Title": p.Title,
                           "YOB": p.YOB,
                           "PKZ" : "",
