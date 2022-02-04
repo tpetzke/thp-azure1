@@ -8,6 +8,11 @@ var session = require('client-sessions');
 // read the .env file and make the value of VARIABLE available via process.env.VARIABLE
 require('dotenv').config(); 
 
+// enable application insights
+const instrumentationKey = process.env.InstrumentationKey || process.env.APPSETTING_APPINSIGHTS_INSTRUMENTATIONKEY;
+let appInsigths = require("applicationinsights");
+appInsigths.setup(instrumentationKey).start();
+
 // CONFIG ITEMS START
 //DB Id
 const dbId = "thpapp1";
