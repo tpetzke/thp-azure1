@@ -53,7 +53,6 @@ app.use(session({
   ephemeral: true
 }));
 
-
 // Make our db and session user name accessible to our router
 app.use(async function (req, res, next) {
 
