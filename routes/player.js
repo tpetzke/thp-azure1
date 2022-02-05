@@ -164,7 +164,12 @@ router.post('/addplayer', async function (req, res) {
 
     var links = {"player":playerUrl, "group": groupUrl};
 
-    if (tournaments[0].tournament.sentmails == "true") Email.sendConfirmation(tournaments[0].tournament, newplayer, currentPlayerCnt, links);
+    if (tournaments[0].tournament.sentmails == "true")
+    {
+      Email.sendConfirmation(tournaments[0].tournament, newplayer, currentPlayerCnt, links);
+      const tele = req.telemetry;
+      tele.trackEvents({name: "MailSent"});
+    }
 
     // And forward to success page
     res.render("success", { player: newplayer, Group: group_desc, status: status, capacity: capacity, playercnt : currentPlayerCnt, tournament: tournaments[0].tournament, links: links});

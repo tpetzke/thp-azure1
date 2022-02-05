@@ -15,6 +15,9 @@ appInsigths.setup(instrumentationKey)
   .setSendLiveMetrics(true)
   .start();
 
+var telemetry = appInsigths.defaultClient;  
+telemetry.trackEvent({name:"AppStarted"});
+
 // CONFIG ITEMS START
 //DB Id
 const dbId = "thpapp1";
@@ -69,6 +72,8 @@ app.use(async function (req, res, next) {
 
   const dewis = db.container(dewisCollectionId);
   req.dewis = dewis;
+
+  req.telemetry = telemetry;
 
   res.locals.userid = req.session.userid;
   res.locals.level = req.session.level;
