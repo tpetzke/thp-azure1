@@ -11,7 +11,9 @@ require('dotenv').config();
 // enable application insights
 const instrumentationKey = process.env.InstrumentationKey || process.env.APPSETTING_APPINSIGHTS_INSTRUMENTATIONKEY;
 let appInsigths = require("applicationinsights");
-appInsigths.setup(instrumentationKey).start();
+appInsigths.setup(instrumentationKey)
+  .setSendLiveMetrics(true)
+  .start();
 
 // CONFIG ITEMS START
 //DB Id
