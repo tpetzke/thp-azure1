@@ -6,7 +6,14 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', async function(req, res, next) {
 
+  //require('dotenv').config(); 
+  let appInsights = require("applicationinsights");
+  //const instrumentationKey = process.env.InstrumentationKey || process.env.APPSETTING_APPINSIGHTS_INSTRUMENTATIONKEY;
+  //appInsights.setup(instrumentationKey).start();
+  appInsights.defaultClient.trackEvent({name: 'new index view', properties:{ak:'U14'}}); 
+
   try {
+
     // Open reference to DB collection <players>
     const container =  req.container;
 

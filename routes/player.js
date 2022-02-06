@@ -167,6 +167,8 @@ router.post('/addplayer', async function (req, res) {
     if (tournaments[0].tournament.sentmails == "true")
     {
       Email.sendConfirmation(tournaments[0].tournament, newplayer, currentPlayerCnt, links);
+      let appInsights = require("applicationinsights");
+      appInsights.defaultClient.trackEvent({name: 'Mail Sent', properties:{ak:group}});
     }
 
     // And forward to success page

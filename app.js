@@ -10,10 +10,12 @@ require('dotenv').config();
 
 // enable application insights
 const instrumentationKey = process.env.InstrumentationKey || process.env.APPSETTING_APPINSIGHTS_INSTRUMENTATIONKEY;
-var appInsights = require("applicationinsights");
+let appInsights = require("applicationinsights");
 appInsights.setup(instrumentationKey)
   .setSendLiveMetrics(true)
   .start();
+
+appInsights.defaultClient.trackEvent({name: 'some event'});  
 
 // CONFIG ITEMS START
 //DB Id
@@ -74,6 +76,7 @@ app.use(async function (req, res, next) {
 
   res.locals.userid = req.session.userid;
   res.locals.level = req.session.level;
+
   next();
 });
 
