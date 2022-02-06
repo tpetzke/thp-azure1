@@ -167,8 +167,6 @@ router.post('/addplayer', async function (req, res) {
     if (tournaments[0].tournament.sentmails == "true")
     {
       Email.sendConfirmation(tournaments[0].tournament, newplayer, currentPlayerCnt, links);
-      const tele = req.telemetry;
-      tele.trackEvents({name: "MailSent"});
     }
 
     // And forward to success page

@@ -10,20 +10,16 @@ require('dotenv').config();
 
 // enable application insights
 const instrumentationKey = process.env.InstrumentationKey || process.env.APPSETTING_APPINSIGHTS_INSTRUMENTATIONKEY;
-let appInsigths = require("applicationinsights");
-appInsigths.setup(instrumentationKey)
+var appInsights = require("applicationinsights");
+appInsights.setup(instrumentationKey)
   .setSendLiveMetrics(true)
   .start();
-
-var telemetry = appInsigths.defaultClient;  
-telemetry.trackEvent({name:"AppStarted"});
 
 // CONFIG ITEMS START
 //DB Id
 const dbId = "thpapp1";
 const collectionId = "players";
 const dewisCollectionId = "dewis";
-
 
 // Connection strings
 const endpoint = process.env.AccountEndpoint || process.env.CUSTOMCONNSTR_AccountEndpoint;
@@ -36,6 +32,9 @@ var playerRouter = require('./routes/player');
 var adminRouter = require('./routes/admin');
 
 var app = express();
+
+// track requests
+app.use((req, res, next) => { appInsights.defaultClient.trackRequest(req, res); next(); });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -72,8 +71,6 @@ app.use(async function (req, res, next) {
 
   const dewis = db.container(dewisCollectionId);
   req.dewis = dewis;
-
-  req.telemetry = telemetry;
 
   res.locals.userid = req.session.userid;
   res.locals.level = req.session.level;
