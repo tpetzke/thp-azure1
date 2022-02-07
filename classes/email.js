@@ -35,13 +35,29 @@ module.exports = internal.Email = class {
               subject: tournament.shortname + ' - Meldebestätigung - ' + player.Firstname + ' ' + player.Lastname, // Subject line
               html: data                  // plain text body
             };
-    
+
+            var success = true;
+            let startTime = Date.now();
+
             transporter.sendMail(mailOptions, function (err, info) {
-              if(err)
-                console.log(err)
+              if(err) {
+                success = false;
+                console.log(err);
+              }
               else
                 console.log(info);
             });
+
+            let duration = Date.now() - startTime;
+            let appInsights = require("applicationinsights");
+            appInsights.defaultClient.trackDependency(
+              {target: 'SendInblue', 
+               name: 'Confirmation Mail',
+               data: 'Outgoing Mail',
+               duration: duration,
+               success:success,
+               dependencyTypeName: 'SMTP'});
+
           } else console.log("UserId and Password for email provider SendinBlue not found in process environment variables");
         };
       });

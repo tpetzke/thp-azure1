@@ -1,4 +1,4 @@
-exports.dbInit = async function(db, default_docs, callback) { 
+exports.dbInit = async function(container, default_docs, callback) { 
 
   var querySpec;
   querySpec = {
