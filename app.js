@@ -71,6 +71,17 @@ app.use(async function (req, res, next) {
   const container = db.container(collectionId);
   req.container = container;
 
+  var querySpec = { query: "SELECT * FROM c where c.tournament.name > ' '" };
+  const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+
+  // empty database, we must init it first with a default tournament and a root admin
+  if (tournaments.length == 0)
+  {
+    var dbutils = require('./routes/dbutils');
+    await dbutils.dbInit(container, null, function() { });
+    console.log("DB initialised...");
+  }
+
   const dewis = db.container(dewisCollectionId);
   req.dewis = dewis;
 

@@ -8,7 +8,7 @@ exports.dbInit = async function(container, default_docs, callback) {
   if (!tournaments.length)
   {
 
-    console.log("Initializing database: " + db.config.db);
+    console.log("Initializing database for tournament data");
 
     // Create an default tournament document
     var tournament_doc = {
@@ -30,7 +30,7 @@ exports.dbInit = async function(container, default_docs, callback) {
             imprint: ""
         }
     };
-    const { resource : createdItem } = await container.items.create(tourname_doc);
+    const { resource : createdItem } = await container.items.create(tournament_doc);
     console.log("Initial tournament created");
   }
 

@@ -18,15 +18,6 @@ router.get('/', async function(req, res, next) {
 
     const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
 
-    // empty database, we must init it first with a default tournament and a root admin
-    if (tournaments.length == 0)
-    {
-      var dbutils = require('./routes/dbutils');
-      dbutils.dbInit(container, null, function() {
-        console.log("DB initialised...");
-      });
-    }
-
     querySpec = {
       query: "select value count(1) from c where c.Firstname > ''"
     };
