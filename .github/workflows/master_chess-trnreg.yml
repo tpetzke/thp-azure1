@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'chess-trnreg'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_16662DD3AF494C819353731B4CCE8460 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4FD4B24FE9F4414A9849F36CEBEE0E3E }}
           package: .
