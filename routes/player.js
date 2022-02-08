@@ -6,7 +6,11 @@ const Email = require('../classes/email');
 /* GET add player Step 1 
    Record Firstname and Lastname of the user */
 router.get('/addplayer1', function(req, res, next) {
-    res.render('addplayer1');
+  
+  let appInsights = require("applicationinsights");
+  appInsights.defaultClient.trackEvent({name: 'Add Player 1 view'});
+
+  res.render('addplayer1');
 });
 
 /* POST add player Step 1 
@@ -56,6 +60,9 @@ router.post('/lookup_player', async function(req, res, next) {
       };
       const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
 
+      let appInsights = require("applicationinsights");
+      appInsights.defaultClient.trackEvent({name: 'Add Player 2 view'});
+      
       res.render('addplayer2', { title: 'Spieler anmelden', firstname : firstname, lastname : lastname, tournament : tournaments[0].tournament, dewis: dewisPlayers });
     
     }
@@ -71,6 +78,9 @@ router.post('/lookup_player', async function(req, res, next) {
       query: "SELECT * FROM c where c.tournament.name > ' '"
     };
     const { resources: tournaments } = await container.items.query(querySpec).fetchAll();
+
+    let appInsights = require("applicationinsights");
+    appInsights.defaultClient.trackEvent({name: 'Add Player 2 view'});
 
     res.render('addplayer2', { title: 'Spieler anmelden', firstname : firstname, lastname : lastname, tournament : tournaments[0].tournament, dewis: dewisPlayers[0] });
   };
@@ -98,6 +108,9 @@ router.post('/verifyplayer', function (req, res) {
   firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
   lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
   club = club.charAt(0).toUpperCase() + club.slice(1);
+
+  let appInsights = require("applicationinsights");
+  appInsights.defaultClient.trackEvent({name: 'Add Player 3 view'});
 
   // And forward to verify page
   res.render("addplayer3", { Title: title, Firstname: firstname, Lastname: lastname, DWZ: dwz, ELO: elo, YOB: yob, Country: country, Group: group, Sex: sex, Club: club, email: email, datetime: datetime, dewisid: dewisid, capacity : capacity });

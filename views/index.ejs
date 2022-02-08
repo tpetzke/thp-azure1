@@ -10,7 +10,14 @@
         <% var capacity_info = ""; if(tournament.capacity !== 0) capacity_info = " Die Turnierkapaziät liegt bei "+tournament.capacity+" Spielern." %>
         <h1><%= tournament.name %></h1>
         <h3><%= tournament.date %> in <%= tournament.location %></h3>
-        <p><%= tournament.description %><%=capacity_info%></p>
+        <p><%
+        var lines = tournament.description.split('|');
+        for(i=0; i<lines.length;i++) { 
+        %>
+        <%=lines[i]%><br>
+        <%} %>
+        </p>
+        <p><%=capacity_info%></p>
         <p>Aktuell gemeldete Spieler : <b><%=playercnt%></b></p>
         <div id="index_button_container">
         <form action="/player/addplayer1">
