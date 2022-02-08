@@ -167,6 +167,8 @@ router.post('/addplayer', async function (req, res) {
     
     const { resource : createdItem } = await container.items.create(newplayer);
     console.log(createdItem);
+    let appInsights = require("applicationinsights");
+    appInsights.defaultClient.trackMetric({name: 'Registered players', value: currentPlayerCnt+1});
 
     // calculate the URLs
     var idx = 0;
