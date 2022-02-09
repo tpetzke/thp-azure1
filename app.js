@@ -12,11 +12,22 @@ require('dotenv').config();
 const instrumentationKey = process.env.InstrumentationKey || process.env.APPSETTING_APPINSIGHTS_INSTRUMENTATIONKEY;
 let appInsights = require("applicationinsights");
 appInsights.setup(instrumentationKey)
+  .setAutoCollectRequests(true)
+  .setAutoDependencyCorrelation(true)
+  .setAutoCollectPerformance(true, true)
+  .setAutoCollectExceptions(true)
+  .setAutoCollectDependencies(true)
+  .setAutoCollectConsole(true)
+  .setUseDiskRetryCaching(true)
   .setSendLiveMetrics(true)
+  .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
   .start();
 
-appInsights.defaultClient.trackEvent({name: 'some event'});  
-
+  let http = require("http");
+  http.createServer( (req, res) => {
+    client.trackNodeHttpRequest({request: req, response: res}); // Place at the beginning of your request handler
+  });
+ 
 // CONFIG ITEMS START
 //DB Id
 const dbId = "thpapp1";
@@ -36,7 +47,7 @@ var adminRouter = require('./routes/admin');
 var app = express();
 
 // track requests
-app.use((req, res, next) => { appInsights.defaultClient.trackRequest(req, res); next(); });
+// app.use((req, res, next) => { appInsights.defaultClient.trackRequest(req, res); next(); });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
