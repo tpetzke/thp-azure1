@@ -22,11 +22,6 @@ appInsights.setup(instrumentationKey)
   .setSendLiveMetrics(true)
   .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
   .start();
-
-  let http = require("http");
-  http.createServer( (req, res) => {
-    client.trackNodeHttpRequest({request: req, response: res}); // Place at the beginning of your request handler
-  });
  
 // CONFIG ITEMS START
 //DB Id
@@ -47,7 +42,10 @@ var adminRouter = require('./routes/admin');
 var app = express();
 
 // track requests
-// app.use((req, res, next) => { appInsights.defaultClient.trackRequest(req, res); next(); });
+app.use((req, res, next) => { appInsights.defaultClient.trackRequest(req, res); next(); });
+
+// store the app insights instrumentation key
+//app.set('instrumentationKey',instrumentationKey);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -69,6 +67,12 @@ app.use(session({
   secure: true,
   ephemeral: true
 }));
+
+// make the instrumentation key available to the templates
+app.use(function(req, res, next) {
+  res.locals.instrumentationKey = instrumentationKey;
+  next();
+});
 
 // Make our db and session user name accessible to our router
 app.use(async function (req, res, next) {
