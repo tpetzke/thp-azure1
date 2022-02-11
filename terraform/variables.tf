@@ -1,10 +1,10 @@
-variable "env_id" {
-  default     = "2"
-  description = "id for the environment to have multiple copies"
+locals {
+  # id of the environment we build
+  env_id = "2"
 }
 
 variable "env" {
-  default     = "rg-trn-webapp-${env_id}"
+  default     = "rg-trn-webapp-${local.env_id}"
   description = "Resouce Group that holds all the resources"
 }
 
@@ -19,7 +19,7 @@ variable "email_key" {
 }
 
 variable "webapp_name" {
-  default = "chess-trnreg-${env_id}"
+  default = "chess-trnreg-${local.env_id}"
   description = "Name of the web app. Will create the WebApp under the URL <webapp_name>.azurewebsites.net"
 }
 
