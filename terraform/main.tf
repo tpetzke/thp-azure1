@@ -16,7 +16,7 @@ provider "azurerm" {
 
 #Create a resource group to hold all the resources
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.env}"
+  name     = "${var.env}-${var.env_id}"
   location = "${var.azure_region}"
 }
 
@@ -44,7 +44,7 @@ output "instrumentation_key" {
 
 resource "azurerm_cosmosdb_account" "cosmos" {
 
-  name                      = "thpcosmos-${local.env_id}"
+  name                      = "thpcosmos-${var.env_id}"
   location                  = azurerm_resource_group.rg.location
   resource_group_name       = azurerm_resource_group.rg.name
   offer_type                = "Standard"
@@ -179,7 +179,7 @@ resource "azurerm_monitor_diagnostic_setting" "asp_diagnostic" {
 
 # Create the web app, pass in the App Service Plan ID, and deploy code from a public GitHub repo
 resource "azurerm_app_service" "webapp" {
-  name                = "chess-trnreg"
+  name                = "chess-trnreg-${var.env_id}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   app_service_plan_id = azurerm_app_service_plan.asp_trnreg.id
@@ -210,7 +210,7 @@ resource "azurerm_app_service" "webapp" {
 }
 
 resource "azurerm_application_insights_web_test" "web_test_index" {
-  name                    = "${var.webapp_name} index page can be loaded"
+  name                    = "${var.webapp_name}-${var.env_id} index page can be loaded"
   location                = azurerm_resource_group.rg.location
   resource_group_name     = azurerm_resource_group.rg.name
   application_insights_id = azurerm_application_insights.app_insights.id
