@@ -1,5 +1,5 @@
 variable "env" {
-  default     = "rg-trn-webapp"
+  default     = "rg-trn-webapp2"
   description = "Resouce Group that holds all the resources"
 }
 
@@ -14,7 +14,7 @@ variable "email_key" {
 }
 
 variable "webapp_name" {
-  default = "chess-trnreg"
+  default = "chess-trnreg2"
   description = "Name of the web app. Will create the WebApp under the URL <webapp_name>.azurewebsites.net"
 }
 
