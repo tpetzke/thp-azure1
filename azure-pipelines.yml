@@ -14,7 +14,7 @@ pool:
 #  vmImage: 'windows-latest'
 
 jobs:
-- job: Chess-TrnReg
+- job: Setup_Azure_Infrastructure
   displayName: 'Build Infra for Tournament Site'
 
   steps:
