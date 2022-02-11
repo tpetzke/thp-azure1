@@ -1,4 +1,4 @@
-# Build Pipeline for Setting up the Use Case 3 Infrastructure
+# Build Pipeline for Setting up the Demo WebApp for Application Insights
 # Triggered by a git push to the master branch
 #
 # Per default the pipeline runs on a self hosted agent on windows in the Default pool
@@ -7,42 +7,111 @@
 trigger:
 - master
 
+variables:
+
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: 'eb5bb4d2-17ff-4624-9cdb-624709c9c009'
+
+  # Web app name
+  webAppName: 'chess-trnreg-2'
+
+  # Environment name
+  environmentName: 'chess-trnreg-2'
+
 pool:
   name: Default
 
-#pool:
-#  vmImage: 'windows-latest'
+stages:
+- stage: Terraform
+  displayName: Terraforming Environment
 
-jobs:
-- job: Setup_Azure_Infrastructure
-  displayName: 'Build Infra for Tournament Site'
+  jobs:
+  - job: Setup_Azure_Infrastructure
+    displayName: 'Build Infra for Tournament Site'
 
-  steps:
-  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-    displayName: Install Terraform
+    steps:
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+      displayName: Install Terraform
 
-  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
-    displayName: 'Terraform : Init'
-    inputs:
-      provider: 'azurerm'
-      workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
-      backendServiceArm: SC4TF
-      backendAzureRmResourceGroupName: 'tfstate'
-      backendAzureRmStorageAccountName: 'tfstate1459'
-      backendAzureRmContainerName: 'tfstate'
-      backendAzureRmKey: tf-webapp2.tfstate
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+      displayName: 'Terraform : Init'
+      inputs:
+        provider: 'azurerm'
+        workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
+        backendServiceArm: SC4TF
+        backendAzureRmResourceGroupName: 'tfstate'
+        backendAzureRmStorageAccountName: 'tfstate1459'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: tf-webapp2.tfstate
 
-  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
-    displayName: 'Terraform : Plan'
-    inputs:
-      command: plan
-      workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
-      environmentServiceNameAzureRM: SC4TF
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+      displayName: 'Terraform : Plan'
+      inputs:
+        command: plan
+        workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
+        environmentServiceNameAzureRM: SC4TF
 
-  - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
-    displayName: 'Terraform : Apply'
-    inputs:
-      command: apply
-      workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
-      environmentServiceNameAzureRM: SC4TF
-      
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+      displayName: 'Terraform : Apply'
+      inputs:
+        command: apply
+        workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
+        environmentServiceNameAzureRM: SC4TF
+
+- stage: Build
+  displayName: Build WebApp
+  dependsOn: Terraform
+  condition: succeeded()
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: Default
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '16.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+      displayName: 'npm install, build and test'
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy WebApp
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(environmentName)
+    pool:
+      name: Default
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy: chess-trnreg-2'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webAppLinux
+              appName: $(webAppName)
+              runtimeStack: 'NODE|16-lts'
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+              startUpCommand: 'npm run start'        
