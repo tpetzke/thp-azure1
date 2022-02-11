@@ -97,7 +97,7 @@ resource "azurerm_cosmosdb_sql_container" "coll_dewis" {
 
 # Create the App Service Plan and the Web App
 resource "azurerm_app_service_plan" "asp_trnreg" {
-  name                = "asp-turnier-webapp"
+  name                = "asp-turnier-webapp-${var.env_id}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   kind                = "Linux"
