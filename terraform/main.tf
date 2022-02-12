@@ -169,7 +169,7 @@ resource "azurerm_monitor_autoscale_setting" "asp_autoscale" {
 
 # Create a diagnostic setting to track auto scaling
 resource "azurerm_monitor_diagnostic_setting" "asp_diagnostic" {
-  name                       = "asp-diagnostic-setting"
+  name                       = "asp-diagnostic-setting-${var.env_id}"
   target_resource_id         = azurerm_app_service_plan.asp_trnreg.id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.log_ws.id
 
@@ -226,7 +226,7 @@ resource "azurerm_application_insights_web_test" "web_test_index" {
   geo_locations           = ["emea-nl-ams-azr", "emea-gb-db3-azr"]
 
   configuration = <<XML
-  <WebTest Name="WebTest1" Id="ABD48585-0831-40CB-9069-682EA6BB3583" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="" ResultsLocale="">
+  <WebTest Name="WebTest${var.env_id}" Id="ABD48585-0831-40CB-9069-682EA6BB3583" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="" ResultsLocale="">
     <Items>
       <Request Method="GET" Guid="a5f10126-e4cd-570d-961c-cea43999a200" Version="1.1" Url="https://${azurerm_app_service.webapp.default_site_hostname}/" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
     </Items>
