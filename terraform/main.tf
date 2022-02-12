@@ -10,6 +10,11 @@ terraform {
   }
 }
 
+terraform {
+  backend "azurerm" {
+  }
+}
+
 provider "azurerm" {
   features {}
 }
@@ -257,7 +262,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "alert_mail" {
   query       = <<-QUERY
   customEvents
   | where name == "Mail Sent" 
-  | summarize Count=count() by bin(timestamp, 1d)
+  | summarize AggregatedValue=count() by bin(timestamp, 1d)
   QUERY
   severity    = 2
   frequency   = 5
@@ -269,7 +274,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "alert_mail" {
       operator            = "GreaterThan"
       threshold           = 1
       metric_trigger_type = "Total"
-      metric_column       = "Count"
+      metric_column       = "AggregatedValue"
     }
   }
 }
