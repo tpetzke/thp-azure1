@@ -1,3 +1,5 @@
+const { Console } = require('console');
+
 exports.dbInit = async function(container, default_docs, callback) { 
 
   var querySpec;
@@ -52,3 +54,5 @@ exports.dbInit = async function(container, default_docs, callback) {
     console.log("Initial admin root created");
   }
 }
+
+

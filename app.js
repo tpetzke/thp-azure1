@@ -38,6 +38,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var playerRouter = require('./routes/player');
 var adminRouter = require('./routes/admin');
+const { ItemResponse } = require('@azure/cosmos');
 
 var app = express();
 
@@ -97,6 +98,7 @@ app.use(async function (req, res, next) {
     console.log("DB initialised...");
   }
 
+  var dbutils = require('./routes/dbutils');
   const dewis = db.container(dewisCollectionId);
   req.dewis = dewis;
 
