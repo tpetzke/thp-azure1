@@ -168,19 +168,19 @@ resource "azurerm_monitor_autoscale_setting" "asp_autoscale" {
 }
 
 # Create a diagnostic setting to track auto scaling
-resource "azurerm_monitor_diagnostic_setting" "asp_diagnostic" {
-  name                       = "asp-diagnostic-setting-${var.env_id}"
-  target_resource_id         = azurerm_app_service_plan.asp_trnreg.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_ws.id
+#resource "azurerm_monitor_diagnostic_setting" "asp_diagnostic" {
+#  name                       = "asp-diagnostic-setting-${var.env_id}"
+#  target_resource_id         = azurerm_app_service_plan.asp_trnreg.id
+#  log_analytics_workspace_id = azurerm_log_analytics_workspace.log_ws.id
 
-  metric {
-    category = "AllMetrics"
+#  metric {
+#    category = "AllMetrics"
 
-    retention_policy {
-      enabled = false
-    }
-  }
-}
+#    retention_policy {
+#      enabled = false
+#    }
+#  }
+#}
 
 # Create the web app, pass in the App Service Plan ID, and deploy code from a public GitHub repo
 resource "azurerm_app_service" "webapp" {
