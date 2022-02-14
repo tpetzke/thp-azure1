@@ -18,12 +18,43 @@ variables:
   # Environment name
   environmentName: 'chess-trnreg-2'
 
+  # Details of Storage Account that holds the terraform state
+  location: 'westeurope'
+  stgAccountRgName: 'tfstate47'
+  stgAccountName: 'sastate474747'
+  stgAccountContainerName: 'sastate47'
+
 pool:
   name: Default
 
 stages:
+- stage: Setup_Stg_Account
+  displayName: Setup Stg Account for Terraform State
+
+  jobs:
+  - job: Create_Storage_Account
+    displayName: 'Create Storage Account'
+
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        workingDirectory: '$(System.DefaultWorkingDirectory)\bicep'
+        azureSubscription: 'SC4TF'
+        scriptType: batch
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo 'Setting up storage acoount $(stgAccountName) in RG $(stgAccountRgName) with container $(stgAccountContainerName)'
+          az deployment sub create ^
+          --location $(location) ^
+          --template-file main.bicep ^
+          --parameters stgAccountRgName=$(stgAccountRgName) ^
+          --parameters stgAccountName=$(stgAccountName) ^
+          --parameters stgAccountContainerName=$(stgAccountContainerName)
+
+stages:
 - stage: Terraform
   displayName: Terraforming Environment
+  dependsOn: Setup_Stg_Account
 
   jobs:
   - job: Setup_Azure_Infrastructure
@@ -39,9 +70,9 @@ stages:
         provider: 'azurerm'
         workingDirectory: '$(System.DefaultWorkingDirectory)\terraform'
         backendServiceArm: SC4TF
-        backendAzureRmResourceGroupName: 'tfstate'
-        backendAzureRmStorageAccountName: 'tfstate1459'
-        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmResourceGroupName: '$(stgAccountRgName)'
+        backendAzureRmStorageAccountName: '$(stgAccountName)'
+        backendAzureRmContainerName: '$(stgAccountContainerName)'
         backendAzureRmKey: tf-webapp2.tfstate
 
     - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
