@@ -20,9 +20,9 @@ variables:
 
   # Details of Storage Account that holds the terraform state
   location: 'westeurope'
-  stgAccountRgName: 'tfstate47'
-  stgAccountName: 'sastate474747'
-  stgAccountContainerName: 'sastate47'
+  stgAccountRgName: 'rg-webapp-tfstate'
+  stgAccountName: 'stgaccwebapptfstate'
+  stgAccountContainerName: 'stgcont-webapp-tfstate'
 
 pool:
   name: Default
