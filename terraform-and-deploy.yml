@@ -51,7 +51,6 @@ stages:
           --parameters stgAccountName=$(stgAccountName) ^
           --parameters stgAccountContainerName=$(stgAccountContainerName)
 
-stages:
 - stage: Terraform
   displayName: Terraforming Environment
   dependsOn: Setup_Stg_Account
